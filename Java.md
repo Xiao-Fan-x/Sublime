@@ -180,3 +180,83 @@ public String toString()
 4. 构造方法，类方法（用 static 修饰的方法）不能声明为抽象方法。
 
 5. 抽象类的子类必须给出抽象类中的抽象方法的具体实现，除非该子类也是抽象类。
+在定义抽象类的时候绝对不能够使用final关键字来进行定义，因为抽象类一定要有子类
+抽象类中可以提供有static方法，并且该方法不受到抽象类对象的局限
+即使抽象类没有实例化对象，那么也无法直接使用关键字new获取抽象类的对象，必须依靠子类完成
+static方法永远不受到实例化对象或结构的限制，永远可以直接通过类名称进行调用
+
+## 包装类 八种
+Java中包装类一共提供有两种类型：
+- 对象型包装类（Object）直接子类：Boolean，Character
+- 数值型的包装类（Number直接子类）： Byte、Short、Integer、Long、Float、Double
+
+public byte byteValue() 	||	从包装类中获取byte数据
+public short shortValue()	||  从包装类中获取short数据
+public abstract int intValue()	|| 
+public abstract long longValue() ||	 
+public abstract float floatValue()	||
+public abstract double doubleValue() ||	
+
+## 装箱与拆箱操作
+基本数据类型的包装类都是为了基本数据类型转为对象提供的，
+数据装箱
+Integer类：public Integer(int value);
+Double类：public Double(double value);
+Boolean类：public Boolean(boolean value);
+数据拆箱
+数值型包装类已经由Number类定义了拆箱的方法了
+Boolean型：public boolean booleanValue();
+
+从JDK1.9之后，对于多有包装类之中提供的构造方法就变为了过期处理，不建议用户在继续使用了，这是因为从JDK1.5之后提供了自动的装箱与拆箱操作，所以这种手工的模式基本上没人用了。
+
+观察自动装箱与拆箱
+public class Test {
+	public static void main(String[] args) {
+		Integer obj = 10;//自动装箱，此时不再关心构造方法了 
+		int num = obj;//自动拆箱
+		obj++;//包装类对象可以直接参与数学运算
+		System.out.println(num*obj);
+	}
+}
+//110
+除了提供数学运算支持之外，使用自动装箱最大的好处是可以实现Object接收基本数据类型的操作。
+Object接收小数：
+public class Test{
+	public static void main(String args[]){
+	Object obj = 19.2;//double自动装箱为Double，向上转型为Object
+	double num = (Double)obj;//向下转型为包装类，再自动拆箱
+	System.out.println(num*2);
+  }
+}
+//38.4
+
+JDK1.5之后提供的自动支持功能，到了JDK1.9之后为了巩固此概念，所以将包装类设为过期
+
+# 接口
+最原始的定义接口之中是只包含有抽象方法与全局常量的，但是从JDK1.8开始引入了Lambda表达式的概念，所以接口的定义也得到了加强，除了抽象方法与全局常量之外，还可以定义普通方法或静态方法。如果从设计本身的角度来将，接口之中的组成还是应该以抽象方法和全局常量为主。
+
+为了区分出接口与类，接口名称前往往会加入“I”
+接口的使用：
+- 接口需要被子类实现（implements），一个子类可以实现多个接口；
+- 子类（如果不是抽象类）那么一定要覆写接口之中的全部抽象方法；
+- 接口对象可以利用子类对象的向上转型进行实例化。
+
+子类实现多个接口，所以这个子类可以是这些接口任意一个接口的实例那么就表示作此时这些接口实例之间是可以转换的。
+
+Object类对象可以接受所有数据类型，包括基本数据类型、类对象、接口对象，数组
+由于接口描述的是一个公共的定义标准，所以在接口之中所有的抽象方法的访问权限都为public，写与不写都是一样的
+
+接口可以省略abstract
+虽然接口无法去继承一个父类，但是一个接口却可以通过extends继承若干个父接口，此时称为接口的多继承
+
+接口的使用：
+- 进行标准设置；
+- 表示一种操作的能力；
+- 暴露远程方法试图，这个一般都在RPC分布式开发中使用
+
+从JDK1.8之后开始，为了解决接口设计的缺陷，所以在接口之中允许开发者定义普通方法
+
+接口中的普通方法必须追加default的申明，但是需要提醒的是，该操作属于挽救功能，所以不是必须的话，不应该作为设计的首选
+
+最好的方法，是在接口与实现类之间创建一个抽象方法（过度抽象类），用抽象类做出实现。
+除了可以追加普通方法之外，接口里面也可以定义static方法，而static方法可以通过接口直接调用
