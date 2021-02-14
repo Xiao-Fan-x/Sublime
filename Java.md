@@ -371,3 +371,126 @@ Lambda格式：
 引用特定类型的方法： 特定类::普通方法
 引用构造方法：类名称::new
 
+
+
+@FunctionalInterface
+
+**interface** IFunction<R> {
+
+​	**public** R upper();
+
+}
+
+
+
+**public** **class** JavaDemo {
+
+​	**public** **static** **void** main(String[] args) {
+
+​		IFunction<String> fun = "www.bing.com" :: toUpperCase; 
+
+​		System.***out\***.println(fun.upper());
+
+​	}
+
+}
+
+WWW.BING.COM
+
+比较大小：public int compareTo(String anotherString)
+
+这是一个普通方法，如果要引用普通方法，则往往都需要实例化对象，但是如果说现在不想给出实例化对象，只是想引用这个方法，则就可以使用特定类来进行引用处理。
+
+引用指定类中的方法
+
+@FunctionalInterface //函数式接口
+
+**interface** IFunction<P> {	
+
+​	**public** **int** compare(P p1,P p2);
+
+}
+
+
+
+**public** **class** JavaDemo {
+
+​	**public** **static** **void** main(String[] args) {
+
+​		IFunction<String> fun = String ::compareTo;
+
+​		System.***out\***.println(fun.compare("A", "a"));
+
+​	}
+
+}
+
+在方法引用里面最具有杀伤力的就是构造方法的引用
+
+引用构造方法：
+
+**class** Person{
+
+​	**private** String name;
+
+​	**private** **int** age;
+
+​	**public** Person (String name,**int** age ) {
+
+​		**this**.name = name;
+
+​		**this**.age = age;
+
+​	}
+
+​	@Override
+
+​	**public** String toString() {
+
+​		**return** "Person [name=" + name + ", age=" + age + "]";
+
+​	}
+
+}
+
+
+
+@FunctionalInterface //函数式接口
+
+**interface** IFunction<R> {
+
+​	**public** R create(String s,**int** a);
+
+}
+
+
+
+**public** **class** JavaDemo {
+
+​	**public** **static** **void** main(String[] args) {
+
+​		IFunction<Person> fun = Person :: **new** ;
+
+​		System.***out\***.println(fun.create("张三", 20));
+
+​	}
+
+}
+
+提供方法引用的概念更多的情况下也只是弥补了对于引用的支持功能。
+
+
+
+## 内建函数式接口
+
+在JDK1.8之中提供有Lambda表达式也提供有方法引用，但是你会发现现在如果由开发者自己定义函数式接口“@FunctionalInterface”注解来进行大量声明，于是很多情况下如果为了方便，则可以直接引用系统中提供的函数式接口。
+
+在系统之中专门提供有一个java.util.function的开发包，里面可以直接使用函数式接口。在这个包下面有如下的核心接口提供使用
+
+1.功能性函数式接口：
+
+| 接口定义：                                                   | 接口使用 |
+| :----------------------------------------------------------- | -------- |
+| @FunctionalInterface<br / >public interface Function<T,R>{<br /> public R apply(T t)<br />} |          |
+|                                                              |          |
+
