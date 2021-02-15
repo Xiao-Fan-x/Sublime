@@ -489,8 +489,37 @@ WWW.BING.COM
 
 1.功能性函数式接口：
 
-| 接口定义：                                                   | 接口使用 |
-| :----------------------------------------------------------- | -------- |
-| @FunctionalInterface<br / >public interface Function<T,R>{<br /> public R apply(T t)<br />} |          |
-|                                                              |          |
+| 接口定义：                                                   | 接口使用                                                     |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| @FunctionalInterface<br / >public interface Function<T,R>{<br /> public R apply(T t)<br />} | import java.util.function.Function;<br/><br/>public class JavaDemo {<br/>	public static void main(String[] args) {<br/>		Function<String, Boolean> function = "**hello" :: startsWith;<br/>		System.out.println(function.apply("**"));<br/>	}<br/>} |
+
+2.消费型函数式接口：只能进行数据的处理操作，没有任何返回
+
+- 在进行系统数据输出的时候使用的是System.out.println()
+
+| 接口定义                                                     | 接口使用                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| @FunctionalInterface<br />public interface Consumer<T>{<br /></t>  public void accept(T t)<br />} | public class JavaDemo {<br/></t >public static void main(String[] args) {<br/></t ></t >Consumer<String> con = System.out :: println;<br/></t ></t >con.accept("www.bing.com");<br/>	}<br/>} |
+
+3.供给型函数式接口：
+
+在string类中提供有转小写方法，这个方法没有接受参数，但是有返回值；public	string toLowerCase();
+
+| 接口定义                                                     | 接口使用                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| @FunctionalInterface<br />public interface Supplier<T>{<br /></t > public T get()<br />} | public class JavaDemo {<br/>	public static void main(String[] args) {<br/>		Supplier< String > sup = "www.bing.com" :: toLowerCase ;<br/>		System.out.println(sup.get());<br/> 	}<br/>} |
+
+4.断言
+
+| 接口定义                                                     | 接口使用                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| @FunctionalInterface<br />public interface Predicate<T>{<br /></t > public boolean test(T t)<br />} | public class JavaDemo {<br/>	public static void main(String[] args) {<br/>		Predicate<String> pre =  "bing" :: equalsIgnoreCase;<br/>		System.out.println(pre.test("BING"));<br/> 	}<br/>} |
+
+以后对于实际项目开发之中,如果JDK本身提供的函数式接口可以被我们所使用,那么就没有不要重新定义
+
+
+
+# 链表
+
+进行链表操作的过程之中为了避免转型的异常应该使用泛型,同时也应该设计一个链表的执行标准的接口,同时具体实现该接口的时候还应该通过Node类做出节点的关系描述
 
