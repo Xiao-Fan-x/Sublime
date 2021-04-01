@@ -574,6 +574,16 @@ WWW.BING.COM
 
 使用Callable实现多线程处理
 
+从最传统的开发来讲如果要进行多线程的实现肯定依靠的就是Runnable,但是Runnable接口有一个缺点：当线程执行完毕后无法获取一个返回值。从JDK1.5之后就提出了一个新的线程实现接口：java.util.concurrent.Callable接口
+
+接口定义：
+
+
+
+
+
+
+
 在进行Thread
 
 一个Java应用程序java.exe，其实至少个线程：main()主线程，gc()垃圾回收线程，异常处理线程。如果发生一场会影响主线程
