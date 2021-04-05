@@ -578,6 +578,72 @@ WWW.BING.COM
 
 接口定义：
 
+```java
+@FunctionalInterface
+public interface Callable<v>{
+	public v call() throws Exception;        
+}
+```
+
+
+
+```
+class MyThread implements Callable<String>{
+	@Override
+	public String call() throws Exception{
+		for()
+		return "线程执行完毕";
+	}
+}
+public class ThreadDemo{
+	public static void main(String[] args){
+		FutureTask<String> task = new FutureTask<>;
+		new Thread(task).start();
+		System.out.println(""+task.get());
+	}
+}
+```
+
+面试题：Runnable与Callable的区别？
+
+Runnable是在JDK1.0的时候提出的多线程的实现接口，而Callable是在JDK1.5之后提出来的
+
+Runnable接口之中只提供有一个run()方法，并且没有返回值。
+
+Callable接口提供有call()方法，可以有返回值；
+
+
+
+## 多线程
+
+1.任何一个线程的对象，都应该使用Thread类进行封装，所以线程的启动使用的是start(),但是启动的时候将进入到一种就绪状态，现在并没有执行；
+
+2.进入到就绪状态后就需要等待进行资源调度，当某一个线程调度成功之后则进入到运行状态（run()方法），但是所有的线程不可能一直持续执行下去，中间需要产生一些暂停的状态；
+
+3.当run()方法执行完毕之后，实际上该线程的主要任务也就结束了，那么此时她可以直接进入到停止状态。
+
+
+
+## 线程的命名与取得
+
+构造方法：public Thread(Runnable target,String name);
+
+设置名字：public final void setName(String name);
+
+取得名字：public final String setName();
+
+获取当前线程：public static Thread currentThread();
+
+
+
+## 线程休眠
+
+休眠：public static void sleep(long millis) throws InterruptedException;
+
+休眠：public static void sleep(long millis,int nanos) throws InterruptedException;
+
+在进行休眠的时候有可能会产生中断异常“InterruptedException”，中断异常属于Exception的子类，所以该异常必须进行处理。
+
 
 
 
