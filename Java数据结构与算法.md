@@ -142,3 +142,140 @@ public class UpStair {
 # 旋转数组的最小数字（改造二分法）
 
 ​		把一个属猪最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的一个旋转，输出旋转数组的最小元素。例如数组{3，4，5，1，2}为【1，2，3，4，5】的一个旋转，该数组的最小值为1
+
+
+
+# 在有空字符串的有序字符串数组中查找
+
+​		有个排序后的字符串数组，其中散布着一些空字符串，编写一个方法，找出给定字符串（肯定不是空字符串）的索引。
+
+```java
+public class Solution02 {
+
+    public static void main(String[] args) {
+        String[] arr = {"a", "", "ac", "ad", "b", "", "ba"};
+        int res = indexOf(arr, "abc");
+        System.out.println(res);
+    }
+
+    private static int indexOf(String[] arr, String p) {
+        int begin = 0;
+        int end = arr.length - 1;
+        while (begin <= end) {
+            int indexOfMid = begin + ((end - begin) >> 1);
+            while (arr[indexOfMid].equals("")) {
+                indexOfMid++;
+                if (indexOfMid > end) {
+                    return -1;
+                }
+            }
+            if (arr[indexOfMid].compareTo(p) > 0) {
+                end = indexOfMid - 1;
+            } else if (arr[indexOfMid].compareTo(p) < 0) {
+                begin = indexOfMid + 1;
+            } else {
+                return indexOfMid;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+
+
+# 最长连续递增子序列（部分有序）
+
+{1,9,2,5,7,3,4,6,8,0}中最长的递增子序列为{3,4,6,8}
+
+dp算法
+
+```java
+public class Solution03 {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        int num = Integer.parseInt(input.nextLine());
+        int[] arr = new int[num];
+        String[] res = input.nextLine().split(" ");
+        for (int i = 0; i < res.length; i++) {
+            arr[i] = Integer.parseInt(res[i]);
+        }
+        int[] dp = new int[num];
+
+        for (int i = 0; i < arr.length; i++) {
+            int max = 0;
+            for (int j=i-1;j>=0;j--){
+                if (arr[j]<=arr[i]){
+                    int temp = dp[j];
+                    max = Math.max(max,temp);
+                }
+            }
+            dp[i]=max+1;
+        }
+        for (int i=0;i<num;i++){
+            System.out.print(dp[i]+" ");
+
+        }
+
+    }
+}
+```
+
+```java
+public class Main {
+    public static void main(String[] args) {
+
+        //输入
+        Scanner sr = new Scanner(System.in);
+        int n = Integer.parseInt(sr.nextLine());
+        int[] res = new int[n];
+        String s[] = sr.nextLine().split(" ");
+        for (int i = 0; i < n; i++)
+            res[i] = Integer.parseInt(s[i]);
+
+
+        int max = 0, count = 0, ss = 0, x = 0, y = 0;
+        for (int i = 0; i < n - 1; i++) {
+            y = i + 1;//判断是否递增，是的话count++;
+            if (res[i + 1] > res[i]) {
+                count++;
+                if (count > max) {
+                    max = count;
+                    ss = x;
+                }
+            } else {
+                count = 0;
+                x = y;//不连续递增，则索引改变为下一个目标
+            }
+        }
+
+        for (int i = ss; i <= ss + max; i++) {
+            if (i == (ss + max)) {
+                System.out.print(res[i]);
+            } else {
+                System.out.print(res[i] + " ");
+            }
+        }
+    }
+
+}
+```
+
+
+
+
+
+排序：
+
+1.分治思想：快速排序、归并排序
+
+2.小和、逆序对等问题求解
+
+3.空间结构之法：堆排序、计数排序等
+
+4.排序算法小节
+
+
+
+分治法：
+
