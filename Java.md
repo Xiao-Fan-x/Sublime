@@ -644,9 +644,55 @@ Callable接口提供有call()方法，可以有返回值；
 
 在进行休眠的时候有可能会产生中断异常“InterruptedException”，中断异常属于Exception的子类，所以该异常必须进行处理。
 
+休眠的主要特点是可以自动实现线程的唤醒，以继续进行后续的处理。
 
 
 
+# 线程中断
+
+线程的休眠里面提供有一个中断异常，实际上就证明线程的休眠是可以被打断的，而这种打断一定是由其他线程完成的。
+
+判断线程是否被中断：public boolean isInterrupted()
+
+中断线程执行：public void interrupt()
+
+
+
+# 线程的强制执行
+
+线程的强制执行指的是当满足于某些条件之后，某一个线程对象将可以一直独占资源，一直到该线程的程序执行结束。
+
+强制执行：public final void join() throws InterruptedException
+
+在进行线程强制执行的时候一定要获取强制执行线程对象之后才可以执行join
+
+
+
+# 线程的礼让
+
+线程的礼让值得是先将资源让出去让别的线程先执行。线程的礼让可以使用Thread中提供的方法
+
+礼让：public static void yield()
+
+
+
+# 线程的优先级
+
+从理论上来讲线程的优先级越高越有可能先执行。
+
+设置优先级：public final void setPriority(int newPriority)
+
+获取优先级：public final int getPriority()
+
+在进行优先级定义的时候都是通过int型数字来完成的，而对于此数字在选择在Thread类里面定义了三个常量
+
+最高优先级：public static final int MAX_PRIORITY: 10 最大
+最低优先级：public static final int MIN_PRIORITY: 1 最小
+中等优先级：public static final int NORM_PRIORITY: 5 默认 
+
+说明：高优先级的线程要抢占低优先级线程cpu的执行权。
+但是只是从概率上讲，高优先级的线程高概率的情况先被执行。
+并不意味着只有当高优先级的线程执行完以后，低优先级的线程才执行。
 
 
 
@@ -673,18 +719,30 @@ JDK中用Thread.State类定义了线程的几种状态 新建--->就绪--->运�
 10.isAlive():判断当前线程是否存活
 *线程的优先级 *1.
 
-MAX_PRIORITY: 10 最大
-MIN_PRIORITY: 1 最小
-NORM_PRIORITY: 5 默认 *2.如何获取和设置当前线程的优先级
-getPriority():获取线程的优先级
-setPriority(int p):设置线程的优先级
-说明：高优先级的线程要抢占低优先级线程cpu的执行权。
-但是只是从概率上讲，高优先级的线程高概率的情况先被执行。
-并不意味着只有当高优先级的线程执行完以后，低优先级的线程才执行。
+
+
 //设置分线程的优先级
 线程名.setPriority(Thread.MAX_PRIORITY)
 
 
 
+# 同步问题
 
+所谓的同步就是指
+
+要在程序中实现这把锁的功能，就可以使用synchronized关键字来实现，利用此方法可以定义同步方法或者同步代码块，在同步代码块的操作里面的代码只允许一个线程执行。
+
+1.利用同步代码块进行处理
+
+```java
+synchronized(同步对象){
+	同步代码操作
+}
+```
+
+一般要进行同步对象处理的时候可以采用当前对象
+
+加入同步处理之后，程序的整体的性能下降了。同步实际上会造成性能的降低。
+
+2.利用同步方法解决：只需要在方法定义上使用synchronized关键字即可。
 
