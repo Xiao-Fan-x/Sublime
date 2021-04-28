@@ -131,7 +131,6 @@ final定义的常量赋值后不能修改
 public static（共享的）final 
 在定义全局常量的时候每一个字母必须大写表述
 
-
 在方法的时候也可以使用final来定义参数，此时也表示一个常量的概念
 （最为常见、最有用处）
 
@@ -168,6 +167,24 @@ annotation式从jdk1.5之后提出的一个新的开发技术，利用annotation
 Object是一个万能的数据类型，它更加适合于进行程序的标准设计
 Object类提供的方法：
 public String toString() 
+
+| 方法                                          | 用途                                   |
+| --------------------------------------------- | -------------------------------------- |
+| Object clone()                                | 创建一个和被复制的对象完全一样的新对象 |
+| boolean equals(Object object)                 | 判定对象是否相等                       |
+| void finalize()                               | 在一个不常用的对象被使用前调用         |
+| Class getClass()                              | 获取运行是一个对象的类                 |
+| int hashCode()                                | 返回调用对象有关的散列值               |
+| void notify()                                 | 恢复一个等待调用对象线程的执行         |
+| void notifyAll()                              | 恢复所有等待调用对象线程的执行         |
+|                                               |                                        |
+| void wait()                                   | 返回描述对象的一个字符串               |
+| void wait(long milliseconds)                  | 等待另一个线程的执行                   |
+| void wait(long milliseconds, int nanoseconds) |                                        |
+
+
+
+
 
 # 抽象类
 抽象类的基本定义：主要作用在于对子类中覆写方法进行约定，在抽象类里面可以去定义一些方法，以实现这样的约定
