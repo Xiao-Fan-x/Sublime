@@ -71,6 +71,18 @@ usage: git add [<options>] [--] <pathspec>...
 
 git add 将修改的文件载入暂存区
 
+| git status -s           |                          |
+| ----------------------- | ------------------------ |
+| M README                | 工作区已修改但未暂存     |
+| MM Rakefile             | 文件已修改，暂存后又修改 |
+| A      lib/git.rb       | 新添加到暂存区           |
+| M      lib/simplegit.rb | 已修改已暂存             |
+| ??      LICENSE.txt     | 新添加未跟踪             |
+
+
+
+
+
 将文件从暂存区中撤下： git rm --cached + 文件
 
 
