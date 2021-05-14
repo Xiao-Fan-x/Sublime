@@ -83,15 +83,29 @@ git add 将修改的文件载入暂存区
 
 
 
-将文件从暂存区中撤下： git rm --cached + 文件
-
-
+将文件从暂存区中撤下： git rm --cached + 文件  (文件仍保留在当前工作目录中，不让 Git 继续跟踪)
 
 查看工作区、暂存区状态：git status
 
 
 
+文件改名操作：git mv file_from file_to
+
+git mv 相当于运行了下面三条命令
+
+$ mv README.md README
+
+$ git rm README.md
+
+$ git add README
 
 
-​	
+
+查看提交历史：git log
+
+git log 会按时间先后顺序列出所有的提交，最近的更新排在最上面
+
+git log -p/-patch  现实最近p次的提交
+
+gi t log --stat  详细显示修改过的文件内容
 

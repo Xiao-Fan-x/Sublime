@@ -2,3 +2,4 @@
 * text=auto
 *.[oa]
 *~
+*.DS_Store
