@@ -775,7 +775,21 @@ synchronized(同步对象){
 
 
 
-￼￼
+
+
+## 利用Object类解决重复操作
+
+死等：public final void wait() throws InterruptedException;
+
+设置等待时间：public final void wait(long timeout) throws InterruptedException;
+
+设置等待时间：public final void wait(long timeout,int nanos) throws InterruptedException;
+
+
+
+
+
+
 
 185.199.108.133 raw.githubusercontent.com
 
