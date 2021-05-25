@@ -787,14 +787,13 @@ synchronized(同步对象){
 
 
 
+唤醒第一个等待线程：public final void notify();
+
+唤醒全部等待线程：public final void notifyAll();
 
 
 
 
-185.199.108.133 raw.githubusercontent.com
 
-185.199.110.133
 
-185.199.109.133
 
-185.199.111.133
