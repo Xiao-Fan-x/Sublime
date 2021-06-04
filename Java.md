@@ -775,9 +775,7 @@ synchronized(同步对象){
 
 
 
-
-
-## 利用Object类解决重复操作
+# 利用Object类解决重复操作
 
 死等：public final void wait() throws InterruptedException;
 
@@ -793,7 +791,17 @@ synchronized(同步对象){
 
 
 
+# 停止线程
 
+停止多线程：public void stop()
 
+销毁多线程：public void destory()
 
+挂起线程：public final void suspend()、暂停执行
+
+恢复挂起的线程执行：public final void resume()
+
+但在JDK1.2之后废除（不推荐用）
+
+主要原因是因为这些方法有可能导致线程的死锁
 
