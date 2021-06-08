@@ -1,4 +1,4 @@
-# java
+# Java
 
 ## this
 
@@ -978,5 +978,65 @@ protected void finalize() throws Throwable 不建议使用
 
 
 
+### clone类
 
+protected Object clone() throws CloneNotSupportedException
+
+所有的类都会继承Object父类，所以所有的类都一定会有clone()方法，但并不是所有的类都希望被克隆，所以如果想要对象克隆，那么对象所在的类需要实现一个Cloneable接口，此借口并没有任何的方法，是因为它描述的是一种能力。
+
+例子：实现对象的克隆
+
+```java
+public class Test {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Member memberA = new Member("xiaofan",16);
+        Member memberB = (Member) memberA.clone();
+        System.out.println(memberA.toString());
+        System.out.println(memberB.toString());
+    }
+}
+
+class Member implements Cloneable{
+    private String name;
+    private int age;
+
+    public Member(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString()+
+                " Member{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+
+Member@677327b6 Member{name='xiaofan', age=16}
+Member@14ae5a5 Member{name='xiaofan', age=16}
+
+
+
+# 数字操作
+
+### Math数学
+
+Math类里面提供的基本上都是基础的数学公式，需要的时候需要自己重新整合
+
+### Random类
+
+产生一个不大于边界的随即非负整数：public int nextInt(int bound)
+
+### 大数字操作类
+
+两个大数字的操作类：BigInteger、BigDecimal
 
