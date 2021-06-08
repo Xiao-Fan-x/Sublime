@@ -847,5 +847,136 @@ volatile无法描述同步的处理，它只是一种直接内存的处理，避
 
 
 
+### StringBuffer类
+
+每一个字符串的常量都属于一个String类的匿名对象，并且不可更改
+
+身体日那个有两个常量池：静态常量池、运行时常量池
+
+String类对象实例化建议使用直接复制的形式完成，这样可以直接将对象保存在对象池之中以方便下次重用
+
+其最大弊端：内容不允许修改。
+
+StringBuffer类可以实现字符串的修改
+
+
+
+| 1    | public StringBuffer append(String s) 将指定的字符串追加到此字符序列。 |
+| ---- | ------------------------------------------------------------ |
+| 2    | public StringBuffer reverse()  将此字符序列用其反转形式取代。 |
+| 3    | public delete(int start, int end) 移除此序列的子字符串中的字符。 |
+| 4    | public insert(int offset, int i) 将 `int` 参数的字符串表示形式插入此序列中。 |
+| 5    | insert(int offset, String str) 将 `str` 参数的字符串插入此序列中。 |
+| 6    | replace(int start, int end, String str) 使用给定 `String` 中的字符替换此序列的子字符串中的字符。 |
+
+StringBuffer类从JDK1.0开始提供
+
+StringBuilder类从JDK1.5开始提供，与StringBuffer功能相同
+
+StringBuffer类方法线程安全
+
+StringBuilder类方法非线程安全（快）
+
+
+
+### CharSequence借口
+
+只要有字符串就可以为CharSequence借口实例化
+
+CharSequence本身是一个借口，
+
+| `char`              | `charAt(int index)`Returns the `char` value at the specified index. |
+| ------------------- | ------------------------------------------------------------ |
+| `default IntStream` | `chars()`Returns a stream of `int` zero-extending the `char` values from this sequence. |
+| `default IntStream` | `codePoints()`Returns a stream of code point values from this sequence. |
+| `int`               | `length()`Returns the length of this character sequence.     |
+| `CharSequence`      | `subSequence(int start,           int end)`Returns a `CharSequence` that is a subsequence of this sequence. |
+| `String`            | `toString()`Returns a string containing the characters in this sequence in the same order as this sequence. |
+
+
+
+### AutoCloseable
+
+主要用于资源开发的处理上，以实现资源的自动关闭（释放）
+
+例如：文件、网络、数据库开发的过程中由于服务器的资源有限，所以使用后一定要关闭。
+
+JDK1.7
+
+关闭方法：
+
+| Modifier and Type | Method and Description                                       |
+| :---------------- | :----------------------------------------------------------- |
+| `void`            | `void close()  throws Exception`关闭此资源，放弃任何基础资源。 |
+
+要想实现自动关闭处理，除了要使用AutoCloseable之外，还要结合一场处理语句才可以正常使用
+
+
+
+## Runtime类（JDK1.0）
+
+描述的是运行时的状态，也就是说在整个JVM之中，Runtime类是唯一一个与JVM运行状态有关的类，默认提供有一个该类的实例化对象。
+
+在每一个JVM进程里面只允许提供有一个Runtime类的对象，所以这个类的构造方法默认私有化了，该类使用的是单例设计模式，并且单例设计模式一定会提供有一个static方法获取本类实例。
+
+由于Runtime类属于单例设计模式，如果想要获取实例化对象，可以依靠类中的getRuntime()方法完成，
+
+获取实例化对象：public static Runtime getRuntime()
+
+获取空闲内存空间：public long freeMemory()
+
+获取可用内存空间：public long totalMemory()本电脑内存的1/64
+
+获取最大内存空间：public long maxMemory()本电脑内存的1/4
+
+手动进行GC处理：public void gc()
+
+long以字节为单位返回
+
+面试题：什么是GC？如何处理？
+
+GC是garbage collector垃圾收集器，是可以由系统自动调用的垃圾释放功能，或者使用Runtime类中的gc()手工调用
+
+
+
+### system类
+
+数组拷贝：public static void arraycopy(Object src,
+                             int srcPos,
+                             Object dest,
+                             int destPos,
+                             int length)
+
+获取当前的日期时间数值：public static long currentTimeMillis()
+
+操作耗时的统计：单位毫秒
+
+
+
+进行垃圾回收：public static void gc()
+
+gc()操作为（Runtime.getRuntime().gc()）并不是重新定义
+
+
+
+### cleaner类
+
+JDK1.9提供的一个对象清理操作，其主要的功能是进行finalize()方法的代替
+
+C++中的析构函数（对象手工回收），在Java中所有的垃圾空间都是通过GC自动回收，很多情况下不使用这类析构函数，因此Java并没有提供这方面的支持
+
+但Java本身依然提供了给用户收尾的操作，
+
+@Deprecated(since="9")
+protected void finalize() throws Throwable 不建议使用
+
+最大的特点是抛出一个Throwable异常类型，这个异常了类型分为两个子类型：Error和Exception,平常处理的都是Exception
+
+从JDK1.9开始建议开发之使用AutoCloseable或者使用java.lang.ref.Cleaner类进行回收处理
+
+（Cleaner也支持有AutoCloseable处理）
+
+
+
 
 
