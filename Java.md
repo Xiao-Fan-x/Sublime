@@ -1040,3 +1040,25 @@ Math类里面提供的基本上都是基础的数学公式，需要的时候需�
 
 两个大数字的操作类：BigInteger、BigDecimal
 
+求余：public BigInteger[] divideAndRemainder(BigInteger val)数组第一个为商第二个为余数
+
+BigDecimal与BigInteger操作是非常类似的，都有基础的数学支持
+
+BigDecimal有进位的问题
+
+除法计算：@Deprecated(since="9")
+public BigDecimal divide(BigDecimal divisor,
+                         int scale,
+                         int roundingMode)
+
+## Date类
+
+时间用的都是毫秒
+
+将long转为Date：public Date(long date)
+
+将Date转为long：public long getTime()
+
+## 格式化日期
+
+SimpleDateFormat
