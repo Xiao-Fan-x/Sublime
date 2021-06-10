@@ -1062,3 +1062,46 @@ public BigDecimal divide(BigDecimal divisor,
 ## 格式化日期
 
 SimpleDateFormat
+
+DateFormat继承 将日期格式化：public final String format(Date date)
+
+DateFormat继承 将字符串转为日期：public Date parse(String source) throws ParseException
+
+构造方法：public SimpleDateFormat(String pattern)
+
+ 	日期格式：年（yyyy）、月（MM）、时（HH）、分（mm）、秒（ss）、毫秒（SSS）、
+
+```java
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Test {
+    public static void main(String[] args) throws CloneNotSupportedException, ParseException {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String str = sdf.format(date);
+        System.out.println(str);
+    }
+}
+```
+
+```java
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Test {
+    public static void main(String[] args) throws CloneNotSupportedException, ParseException {
+        String birthday = "1999-10-20 10:10:10";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = sdf.parse(birthday);
+        System.out.println(date);
+    }
+}
+```
+
+
+
+
+
