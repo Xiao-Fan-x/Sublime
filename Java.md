@@ -1167,9 +1167,30 @@ XY		X｜Y
 
 ## java.util.regex开发包
 
-1.Partern类提供有正则表达式的编译处理支持：public static Pattern compile(String regex)
+1.Partern类提供有正则表达式的编译处理支持：
 
-同时也提供有字符串的拆分操作：public String[] split(CharSequence input)
+public static Pattern compile(String regex)
+
+同时也提供有字符串的拆分操作：
+
+public String[] split(CharSequence input)
+
+```java
+import java.util.regex.Pattern;
+
+public class Test {
+    public static void main(String[] args) {
+        String str = "daddsdad()dasddasf$$()dsadffds()$dasd$%ds";
+        String regex = "[^a-zA-Z]";
+        Pattern pat = Pattern.compile(regex);
+        System.out.println(pat);
+        String res[] = pat.split(str);
+        for (int i =0;i<res.length;i++){
+            System.out.println(res[i]);
+        }
+    }
+}
+```
 
 2.Matcher类，实现了正则匹配的处理类，这个类的对象实例化依靠Pattern类完成
 
@@ -1179,17 +1200,99 @@ Pattern类提供的方法：public Matcher matcher(CharSequence input)
 
 正则匹配：public boolean matches()
 
+```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+public class Test {
+    public static void main(String[] args) {
+        String str = "101";
+        String regex = "\\d+";
+        Pattern pat = Pattern.compile(regex);
+        Matcher mat = pat.matcher(str);
+        System.out.println(mat.matches());
+    }
+}
+```
 
 如果纯粹以拆分、替换、匹配三种操作根本用不到java.util.regex开发包，只依靠String类就都可以实现了。但是Matcher类中提供有一种分组的功能，而这种分组的功能是String不具备的
 
+```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Test {
+    public static void main(String[] args) {
+        String str = "iaodjsadjosa#{dasd}()dsdad";
+        String regex = "#\\{\\w+\\}";
+        Pattern pat = Pattern.compile(regex);
+        Matcher mat = pat.matcher(str);
+        while (mat.find()){
+            System.out.println(mat.group(0).replaceAll("#|\\{|\\}",""));
+        }
+    }
+}
+```
 
 
 
+# 国际化程序实现
+
+同一个国家可以根据不同国家实现不同的语言描述，但是程序核心业务是相同的
+
+利用区域编码加载显示文字信息
+
+1.如何可以定义保存文字的文件信息
+
+2.如何可以根据不同的区域语言的编码读取指定的资源信息
 
 
 
+## locale类
+
+一个专门描述区域和语言编码的类：Locale
+
+构造方法：public Locale（String language);
+
+构造方法：public Locale（String language,String country);
+
+需要的是国家和语言的代码，而中文的代码：zh_CN、美国英国的代码：en_US
+
+对于这些区域和语言的编码，最简单的获得方式就是可以通过IE浏览器
+
+```java
+import java.util.Locale;
+
+public class Test {
+    public static void main(String[] args) {
+        Locale loc = new Locale("zh","CN");
+        System.out.println(loc);
+    }
+}
+```
+
+手工选择文字
+
+自动获得当前的运行环境：
+
+读取本地默认环境：public static Locale getDefault()
+
+在实际的开发过程之中，为了简化开发，Locale也将世界上一些比较著名的国家编码设置为常量；
+
+使用常量的优势在于可以避免一些区域编码信息的繁琐。
 
 
 
+## 读取资源文件：ResourceBundle
 
+已经准备好了资源文件：那么随后就需要进行资源文件的读取操作了，二读取资源文件主要依靠的java.util.ResourceBundle类
+
+public abstract class ResourceBundle extends Object
+
+ResourceBundle是一个抽象类，如果说现在要想进行此类对象的实例化可以直接使用一个静态方法
+
+public static final ResourceBundle getBundle(String baseName)
+
+basename描述的是资源文件的名称，但是没有后缀
+
+使用
