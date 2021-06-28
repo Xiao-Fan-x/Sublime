@@ -1293,6 +1293,124 @@ ResourceBundle是一个抽象类，如果说现在要想进行此类对象的实
 
 public static final ResourceBundle getBundle(String baseName)
 
-basename描述的是资源文件的名称，但是没有后缀
+basename描述的是资源文件的名称（.properties文件），但是没有后缀
 
-使用
+读取资源内容：public final String getString(String key);
+
+如果资源没有放在包里面，则直接编写资源名称即可
+
+在进行资源读取的时候数据的key一定要存在，如果不存在则会出现如下异常：
+
+java.util.MissingResourceException:
+
+错误的资源异常
+
+使用ResourceBundle读取内容
+
+public static final ResourceBundle getBundle(String baseName,
+                                             Locale locale)
+
+读取顺序：读取指定区域的资源文件>默认的本地资源>公共的资源
+
+```java
+import java.util.ResourceBundle;
+
+public class Test {
+    public static void main(String[] args) throws Exception{
+        ResourceBundle resource = ResourceBundle.getBundle("ali.message.Message");
+        String val = resource.getString("info");
+        System.out.println(val);
+    }
+}
+```
+
+```java
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class Test {
+    public static void main(String[] args) throws Exception{
+        Locale loc = new Locale("en","US");
+        ResourceBundle resource = ResourceBundle.getBundle("ali.message.Message",loc);
+        String val = resource.getString("info");
+        System.out.println(val);
+    }
+}
+```
+
+```properties
+# Message_en_US.properties
+info=Welcome!
+```
+
+```properties
+# Message_zh_CN.properties
+info=你好！
+```
+
+如果有指定区域的资源文件存在的时候，那么没有设置区域的资源文件的信息将不会被读取
+
+
+
+## 格式化文本显示
+
+修改资源文件
+
+中文资源文件
+
+info=你好，{0}！今天是{1}。
+
+英文资源文件
+
+Welcome {0},date {1}.
+
+需要MessageFormat类进行格式化处理，Format类的子类
+
+public static String format(String pattern,
+                            Object... arguments)
+
+```java
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class Test {
+    public static void main(String[] args) throws Exception{
+        Locale loc = new Locale("en","US");
+        ResourceBundle resource = ResourceBundle.getBundle("ali.message.Message",loc);
+        String val = resource.getString("info");
+        System.out.println(MessageFormat.format(val,"csdn",new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
+    }
+}
+```
+
+```properties
+info=你好！{0},日期{1}。
+```
+
+
+
+## UUID
+
+UUID是一种生成无重复字符串的一种程序类，这种程序类的主要功能是根据时间戳实现一个自动的无重复的字符串定义。重复的概率千万分之一（intel曾经出现过重复并且造成巨大损失）
+
+获取UUID：public static UUID randomUUID()
+
+根据字符串获取UUID内容：public static UUID fromString(String name)
+
+在对一些文件进行自动命名处理的情况下，UUID类型非常好用。
+
+
+
+## Optional类
+
+主要功能是进行null的相关处理，在进行程序开发的时候，如果为了防止程序之中出现空指向异常，
+
+
+
+
+
+
+
