@@ -1410,7 +1410,197 @@ UUID是一种生成无重复字符串的一种程序类，这种程序类的主�
 
 
 
+## ThreadLocal类
 
+构造方法：public ThreadLocal();
+
+设置数据：public void set( T value );
+
+取出数据：public T get();
+
+删除数据：public void remove();
+
+每一个线程通过ThreadLocal只允许保存一个数据
+
+```java
+public class JavaAPIDemo {
+    public static void main(String[] args) {
+        new Thread(()->{
+            Message msg1 = new Message();
+            msg1.setInfo("第一个线程");
+            Channel.setMessage(msg1);
+            Channel.send();
+        },"线程一").start();
+        new Thread(()->{
+            Message msg2 = new Message();
+            msg2.setInfo("第二个线程");
+            Channel.setMessage(msg2);
+            Channel.send();
+        },"线程二").start();
+        new Thread(()->{
+            Message msg3 = new Message();
+            msg3.setInfo("第三个线程");
+            Channel.setMessage(msg3);
+            Channel.send();
+        },"线程三").start();
+    }
+}
+
+class Channel{
+    private static final ThreadLocal<Message> THREADLOCAL = new ThreadLocal<Message>();
+    private Channel(){}
+    public static void setMessage(Message m){
+        THREADLOCAL.set(m);
+    }
+    public static void send(){
+        System.out.println(Thread.currentThread().getName()+"[消息发送]"+ THREADLOCAL.get().getInfo());
+    }
+}
+
+class Message{
+    private String info;
+    public void setInfo(String info){
+        this.info = info;
+    }
+    public String getInfo() {
+        return info;
+    }
+}
+```
+
+
+
+## 定时器
+
+定时器主要操作时进行定时任务的处理
+
+Java中提供有定时任务的支持，但只支持间隔出发的操作。
+
+一个接口一个类
+
+java.util.TimerTask类：实现定时任务处理
+
+java.util.Timer类：进行任务的启动，启动的方法
+
+​	任务启动：public void schedule(TimerTask task,long delay);延迟单位为毫秒
+
+public void scheduleAtFixedRate(TimerTask task,
+                                long delay,
+                                long period)
+
+```java
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class JavaAPIDemo {
+    public static void main(String[] args) {
+        Timer timer = new Timer();
+        timer.schedule(new MyTask(),100,1000);
+    }
+}
+class MyTask extends TimerTask{
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName()+"、定时任务执行，当前时间"+System.currentTimeMillis());
+    }
+}
+```
+
+
+
+
+
+## base64加密与解密
+
+
+
+Base64.Encoder：加密处理
+
+​	public byte[] encode(byte[] src)
+
+Base64.Decoder:解密处理
+
+​	public byte[] decode(String src)
+
+```java
+import java.util.Base64;
+
+public class JavaAPIDemo {
+    public static void main(String[] args) {
+        String msg = "www.baidu.com";
+        String encmsg = new  String(Base64.getEncoder().encode(msg.getBytes()));
+        System.out.println(encmsg);
+        String oldMsg = new String(Base64.getDecoder().decode(encmsg));
+        System.out.println(oldMsg);
+    }
+}
+```
+
+
+
+盐值加密算法
+
+```
+public class JavaAPIDemo {
+    public static void main(String[] args) {
+        String msg = "www.baidu.com";
+        String encmsg = new  String(Base64.getEncoder().encode(msg.getBytes()));
+        System.out.println(encmsg);
+        String oldMsg = new String(Base64.getDecoder().decode(encmsg));
+        System.out.println(oldMsg);
+    }
+}
+```
+
+多次加密
+
+```java
+import java.util.Base64;
+
+class StringUtil{
+    private static final String SALT = "wwwcom";
+    private static final int REPEAT = 3;
+    /**
+     * SALT:需要加密的字符串，需要与盐值整合
+     * REPEAT：加密的重复次数
+     * return：加密后的数据
+     */
+
+    public static String encode(String str){
+        String temp = str + "{" + SALT + "}";
+        byte[] data = temp.getBytes();
+        for (int i = 0; i < REPEAT; i++) {
+            data = Base64.getEncoder().encode(data);
+        }
+        return new String(data);
+    }
+
+    public static String decode(String str){
+        byte[] data = str.getBytes();
+        for (int i = 0; i < REPEAT; i++) {
+            data = Base64.getDecoder().decode(data);
+        }
+        return new String(data).replaceAll("\\{[a-zA-Z]]\\}","");
+    }
+}
+
+public class JavaAPIDemo {
+    public static void main(String[] args) {
+        String msg = "www.baidu.com";
+        String str = StringUtil.encode("www.baidu.com");
+        System.out.println(str);
+        System.out.println(StringUtil.decode(str));
+    }
+}
+```
+
+复杂加密
+
+最好的做法是使用2-3中加密程序，同时再找到一些完全不可解密的加密算法。
+
+
+
+# 比较器
 
 
 
