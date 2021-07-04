@@ -1604,13 +1604,29 @@ public class JavaAPIDemo {
 
 
 
+comparable接口
+
+comparator比较器
+
+在Arrays类里面排序有另外一种实现：
+
+：public static <T> void sort(T[] a, Comparator<? super T> c);
+
+不建议使用comparator
+
+面试题：请解释Comparator与Comparable的区别？
+
+​	java.lang.Comparable是在类定义的时候实现的父接口，主要用于定义排序规则，里面主要有comparaTo()方法
+
+​	java.util.Comparator是挽救的比较器操作，需要设置单独的比较器规则类实现排序，里面主要是compare()方法
 
 
 
+## 二叉树结构
 
+时间复杂度O(logn)
 
-
-
+二叉树：前序，中序，后序
 
 
 
