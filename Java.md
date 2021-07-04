@@ -1628,9 +1628,118 @@ comparator比较器
 
 二叉树：前序，中序，后序
 
+```java
+import java.time.chrono.IsoChronology;
+
+public class BinaryTree<T extends Comparable<T>> {
+
+    private class Node {
+        private Comparable<T> data;//存放comparable，可以比较大小
+        private Node parent;    //保存父节点
+        private Node left;
+        private Node right;
+
+        public Node(Comparable<T> data) {
+            this.data = data;
+        }
+
+        public void addNode(Node newNode) {
+            if (newNode.data.compareTo((T) this.data) <= 0) {
+                if (this.left == null) {
+                    this.left = newNode;
+                    newNode.parent = this;
+                } else {
+                    this.left.addNode(newNode);
+                }
+            } else {
+                if (this.right == null) {
+                    this.right = newNode;
+                    newNode.parent = this;
+                } else {
+                    this.right.addNode(newNode);
+                }
+            }
+        }
+
+        //获取所有数据，中序遍历
+        public void toArrayNode() {
+            if (this.left != null) {
+                this.left.toArrayNode();
+            }
+            BinaryTree.this.returnData[BinaryTree.this.foot++] = this.data;
+            if (this.right != null) {
+                this.right.toArrayNode();
+            }
+        }
+    }
+
+    private Node root;
+    private int count;
+    private Object[] returnData;
+    private int foot = 0;//脚标控制
+
+
+    public void add(Comparable<T> data) {
+        if (data == null) {
+            throw new NullPointerException("保存的数据不能为空");
+        }
+        Node newNode = new Node(data);
+        if (this.root == null) {
+            this.root = newNode;
+        } else {
+            this.root.addNode(newNode);
+        }
+        this.count++;
+    }
+
+    public Object[] toArray() {
+        if (this.count == 0) {
+            return null;
+        }
+        this.returnData = new Object[this.count];//保存长度为数组长度
+        this.foot = 0;//脚标清零
+        this.root.toArrayNode();
+        return this.returnData;
+    }
+
+}
+```
+
+## 数据删除
 
 
 
+
+
+```java
+if(args.length != 1){
+
+​	System.out.println(" ");
+
+​	System.exit(1);
+
+}	
+```
+
+
+
+```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Test {
+    public static void main(String[] args) {
+        String str = "<font face=\"Arial,Serif\"size=\"+2\" color=\"red\">";
+        String regex = "\\w+=\"[a-zA-Z0-9,\\+]+\"";
+        Matcher matcher = Pattern.compile(regex).matcher(str);
+        while (matcher.find()){
+            String temp = matcher.group(0);
+            String result[] = temp.split("=");
+            System.out.println(result[0]+"\t"+result[1].replaceAll("\"",""));
+        }
+    }
+}
+```
 
 
 
