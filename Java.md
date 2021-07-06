@@ -1741,9 +1741,25 @@ public class Test {
 }
 ```
 
+## 红黑树
 
+本质就是在节点上追加了一个表示颜色的操作信息
 
+```java
+enum Color{	//枚举类
+	RED,BLACK;
+}
 
+class BinaryTree<T>{
+	private T data;
+	private Node parent;
+	private Node left;
+	private Node right;
+	private Color colo;
+}
+```
+
+Node节点中的颜色标记也可以使用true和false表示，不一定要使用枚举类
 
 
 
