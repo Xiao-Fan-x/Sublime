@@ -1761,21 +1761,116 @@ class BinaryTree<T>{
 
 Node节点中的颜色标记也可以使用true和false表示，不一定要使用枚举类
 
+![image-20210706194111037](C:\Users\Xiao\AppData\Roaming\Typora\typora-user-images\image-20210706194111037.png)
 
 
 
 
 
+# Java的I/O编程
+
+java.io.File
+
+File类是唯一一个与文件本身操作（创建、删除、重命名等等）有关的，需要文件完整路径
+
+构造方法：public File(String pathname)
+
+构造方法：public File(String parent,String child) 设置父路劲与子目录
+
+创建新的文件：public boolean createNewFile() throws IOException
+
+判断文件是否存在：public boolean exists()
+
+删除文件：public boolean delete()
 
 
 
+windows下的分隔符“\”，Linux下的分隔符“/”,File类提供有一个常量：
+
+public static final String separator
 
 
 
+获取父路径：public File getParentFile()
+
+创建目录：public boolean mkdirs()
+
+文件可读：public boolean canRead()
+
+文件可写：public boolean canWrite()
+
+文件的大小（字节）：public long length()
+
+最后的修改时间：public long lastModified()
+
+是否为目录：public boolean isDirectory()
+
+是否为文件：public boolean isFile()
+
+目录文件public File[] listFiles()
+
+```java
+import java.io.File;
+
+public class Test {
+    public static void main(String[] args) {
+        File file = new File("C:\\Users\\Xiao\\Pictures\\雷蛇壁纸");
+        long start = System.currentTimeMillis();
+        renameDir(file);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
+    }
+    private static void renameDir(File file) {
+        if (file.isDirectory()) {
+            File results[] = file.listFiles();
+            if (results != null) {
+                for (int x = 0; x < results.length; x++) {
+                    renameDir(results[x]);
+                }
+            }
+        } else {
+            if (file.isFile()) {
+                String filename = null;
+                if (file.getName().contains(".")){
+                    filename = file.getName().substring(0,file.getName().lastIndexOf("."))+".png";
+                }else {
+                    filename = file.getName()+".png";
+                }
+                File newFile = new File(file.getParentFile(),filename);
+                file.renameTo(newFile);
+            }
+        }
+    }
+}
+```
 
 
 
+## java字节流操作
+
+字节处理流：OutputStream（输出字节流）、InputStream（输入字节流）
+
+字符处理流：Writer（输出字符流）、Reader（输入字符流）
 
 
 
+所有的流操作都应该采用统一的步骤进行：文件处理的流程
+
+
+
+文件的读写操作，通过File类找到一个文件路径
+
+通过字节流或字符流的子类为弗雷对象实例化
+
+利用字节流或字符流中的方法是西安数据的输入与输出操作
+
+流的造作属于资源操作，资源操作必须进行关闭处理
+
+
+
+## OutputStream 类
+
+字节的数据已byte类型为主的操作
+
+public abstract class OutputStream extends Object implements Closeable, Flushable
 

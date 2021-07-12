@@ -10,6 +10,43 @@
 
 
 
+继承、组合、代理
+
+```java
+public class Test {
+    public static void main(String[] args) {
+        UserDao target = new UserDao();
+        UserDaoProxy proxy = new UserDaoProxy(target);
+        proxy.save();
+    }
+}
+
+interface IUserDao{
+    void save();
+}
+
+class UserDao implements IUserDao{
+    @Override
+    public void save() {
+        System.out.println("------已保存数据----");
+    }
+}
+
+class UserDaoProxy implements IUserDao{
+    private IUserDao target;
+    public UserDaoProxy(IUserDao target){
+        this.target = target;
+    }
+
+    @Override
+    public void save() {
+        System.out.println("开始事务...");
+        target.save();//执行目标对象的方法
+        System.out.println("提交事务...");
+    }
+}
+```
+
 （静态多态）
 
 重载和重写这两个概念：
