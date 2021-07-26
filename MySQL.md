@@ -1,3 +1,25 @@
+创建用户：create USER 用户名@IP地址 IDENTIFIED BY '密码'  //指定IP地址
+
+CREATE USER 用户名@'%' IDENTIFIED BY '密码'
+
+授予用户权限
+
+GRANT 权限1,权限2,权限3... ON 数据库.* TO  用户名@IP地址
+
+撤销用户权限：
+
+REVOKE  权限1,权限2,权限3... ON 数据库.* FROM  用户名@IP地址
+
+查看用户权限：
+
+SHOW GRANTS FOR 用户名@IP地址
+
+删除用户：
+
+DROP USER 用户名@IP地址
+
+
+
 修改root密码
 
 mysqladmin -uroot -p 123456 password abcdef
@@ -18,7 +40,7 @@ DB操作：show databases;
 
 显示集合：SELECT DISTINCT *column_name*,*column_name* FROM *table_name*;
 
-
+distinct
 
 |          |            |                  |                   |
 | -------- | ---------- | ---------------- | ----------------- |
@@ -149,6 +171,12 @@ SELECT MAX(salary) AS max_salary,MIN(salary) FROM employee;
 
 **使用 AS 关键词可以给值重命名**，比如最大值被命名为了 max_salary：
 
+
+
+### 分组查询
+
+GROUP BY 
+
 #### 子查询
 
 想要知道名为 "Tom" 的员工所在部门做了几个工程。员工信息储存在 employee 表中，但工程信息储存在 project 表中。
@@ -178,4 +206,43 @@ FROM employee JOIN department
 ON employee.in_dpt = department.dpt_name 
 
 ORDER BY id;
+
+
+
+CONCAT(xxx,xxx) 连接操作
+
+IFNULL(a,b)如果为NULL a->b
+
+
+
+## 编码字符集问题
+
+查看：
+
+  方法一：show variables like '%character%';
+  方法二：show variables like 'collation%';
+
+
+
+default-character-set=utf8
+
+### 备份
+
+导出：mysqldump -uroot -p123456  数据库名>地址
+
+导入：mysql -uroot -p123456 数据库名<地址
+
+导入：source 地址
+
+
+
+## 外键
+
+外键必须是另一个表的主键的值（外键要引用主键）
+
+外键可以重复
+
+外键可以为空
+
+一张表可以有多个外键
 

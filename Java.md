@@ -249,6 +249,12 @@ public class Test{
 
 JDK1.5之后提供的自动支持功能，到了JDK1.9之后为了巩固此概念，所以将包装类设为过期
 
+
+
+包装类相等判断的时候一定要使用equals判断
+
+
+
 # 接口
 最原始的定义接口之中是只包含有抽象方法与全局常量的，但是从JDK1.8开始引入了Lambda表达式的概念，所以接口的定义也得到了加强，除了抽象方法与全局常量之外，还可以定义普通方法或静态方法。如果从设计本身的角度来将，接口之中的组成还是应该以抽象方法和全局常量为主。
 
@@ -614,9 +620,10 @@ class MyThread implements Callable<String>{
 }
 public class ThreadDemo{
 	public static void main(String[] args){
-		FutureTask<String> task = new FutureTask<>;
+		MyThread mythread = new MyThread();
+		FutureTask<String> task = new FutureTask<>(mythread);
 		new Thread(task).start();
-		System.out.println(""+task.get());
+		
 	}
 }
 ```
@@ -629,7 +636,44 @@ Runnable接口之中只提供有一个run()方法，并且没有返回值。
 
 Callable接口提供有call()方法，可以有返回值；
 
+ * 1. call()可以有返回值的。
+ * 2. call()可以抛出异常，被外面的操作捕获，获取异常的信息
+ * 3. Callable是支持泛型的
 
+方法四：
+
+ * 创建线程的方式四：使用线程池
+ *
+
+ * 好处：
+
+ * 1.提高响应速度（减少了创建新线程的时间）
+
+ * 2.降低资源消耗（重复利用线程池中线程，不需要每次都创建）
+
+ * 3.便于线程管理
+
+ * corePoolSize：核心池的大小
+
+ * maximumPoolSize：最大线程数
+
+ * keepAliveTime：线程没有任务时最多保持多长时间后会终止
+
+   
+   
+   ```
+   //1. 提供指定线程数量的线程池
+   ExecutorService service = Executors.newFixedThreadPool(3);
+   ThreadPoolExecutor service1 = (ThreadPoolExecutor) service;
+   //设置线程池的属性
+   service1.setCorePoolSize(15);
+   service1.setKeepAliveTime();
+   //2.执行指定的线程的操作。需要提供实现Runnable接口或Callable接口实现类的对象
+   service.execute(new NumberThread());//适合适用于Runnable
+   service.execute(new NumberThread());//适合适用于Runnable
+   //3.关闭连接池
+   service.shutdown();
+   ```
 
 ## 多线程
 
@@ -741,6 +785,17 @@ JDK中用Thread.State类定义了线程的几种状态 新建--->就绪--->运�
 //设置分线程的优先级
 线程名.setPriority(Thread.MAX_PRIORITY)
 
+面试题：sleep() 和 wait()的异同？
+1.相同点：
+
+一旦执行方法，都可以使得当前的线程进入阻塞状态。
+2.不同点：
+
+1）两个方法声明的位置不同：Thread类中声明sleep() , Object类中声明wait()
+2）调用的要求不同：sleep()可以在任何需要的场景下调用。 wait()必须使用在同步代码块或同步方法中
+3）关于是否释放同步监视器：如果两个方法都使用在同步代码块或同步方法中，sleep()不会释放锁，wait()会释放锁。
+
+
 
 
 # 同步问题
@@ -755,6 +810,12 @@ JDK中用Thread.State类定义了线程的几种状态 新建--->就绪--->运�
 synchronized(同步对象){
 	同步代码操作
 }
+synchronized (this) { //唯一对象
+	同步代码操作
+}
+synchronized (类名.class) {	//多个对象
+	同步代码操作
+}
 ```
 
 一般要进行同步对象处理的时候可以采用当前对象
@@ -764,6 +825,24 @@ synchronized(同步对象){
 2.利用同步方法解决：只需要在方法定义上使用synchronized关键字即可。
 
 ￼￼
+
+```java
+/**
+ * 解决线程安全问题的方式三：Lock锁  --- JDK5.0新增
+ *
+ * 1. 面试题：synchronized 与 Lock的异同？
+ *   相同：二者都可以解决线程安全问题
+ *   不同：synchronized机制在执行完相应的同步代码以后，自动的释放同步监视器
+ *        Lock需要手动的启动同步（lock()），同时结束同步也需要手动的实现（unlock()）
+ *
+ * 2.优先使用顺序：
+ * Lock  同步代码块（已经进入了方法体，分配了相应资源）  同步方法（在方法体之外）
+ */
+```
+
+
+
+
 
 # 程序死锁
 
@@ -825,6 +904,12 @@ synchronized(同步对象){
 
 
 
+## transient关键字
+
+声明的实例对象，只能在内存中储存，当对象存储时，它的值不需要维持
+
+（无法被序列化）
+
 ## volatile关键字
 
 **在多线程的定义之中，volatile关键字主要是在属性定义上使用的，表示此属性为直接数据操作，而不进行副本的拷贝处理。**这样的话在一些书上就将其错误的理解为同步属性了。
@@ -837,13 +922,31 @@ synchronized(同步对象){
 
 3.将计算后的变量，保存到原始空间之中
 
-而如果一个属性上追加了volatile关键字，表示的就是副使用副本，而是直接操作原始变量，相当于节约了：拷贝副本，重新保存的步骤
+而如果一个属性上追加了volatile关键字，表示的就是不使用副本，而是直接操作原始变量，相当于节约了：拷贝副本，重新保存的步骤
 
 面试题：请解释volatile与synchronized的区别？
 
 volatile主要在属性上使用，而synchronized是在代码快与方法上使用的。
 
 volatile无法描述同步的处理，它只是一种直接内存的处理，避免了副本的操作，而synchronized是同步操作
+
+
+
+## 序列化
+
+Serializable接口
+
+Exteranlizable接口
+
+static全局变量不会被序列化
+
+
+
+## strictfp关键字
+
+一旦使用了strictfp来声明一个 类、接口或者方法时，那么所声明的范围内Java的编译器以及运行环境会完全依照浮点规范IEEE-754来执行。因此如果你想让你的浮点运算更加精确， 而且不会因为不同的硬件平台所执行的结果不一致的话，那就请用关键字strictfp。 
+
+你可以将一个类、接口以及方法声明为strictfp，但是不允许对接口中的方法以及构造函数声明strictfp关键字
 
 
 
@@ -1873,4 +1976,71 @@ public class Test {
 字节的数据已byte类型为主的操作
 
 public abstract class OutputStream extends Object implements Closeable, Flushable
+
+
+
+| 方法                                                         | 类型 |                  |
+| ------------------------------------------------------------ | ---- | ---------------- |
+| public abstract void write(int b)<br/>                    throws IOException | 普通 | 输出单个字节数据 |
+| public void write(byte[] b)<br/>           throws IOException | 普通 | 输出一组字节数据 |
+| public void write(byte[] b,<br/>                  int off,<br/>                  int len)<br/>           throws IOException | 普通 | 输出部分字节数据 |
+
+
+
+覆盖：public FileOutputStream(File file)
+                 throws FileNotFoundException
+
+追加：public FileOutputStream(File file,
+                        boolean append)
+                 throws FileNotFoundException
+
+使用OutputSteam类实现内容输出：
+
+
+
+## Native关键字 Java Native Interface(JNI)
+
+为声明一个本机方法，在该方法之前用native修饰符，但是不要定义任何方法体。例如：
+
+public native int meth() ;
+
+## 字符串处理
+
+实现固定的，不可变的字符串比实现可变的字符串更高效
+
+regionMatches( )方法将一个字符串中指定的区间和另一字符串中指定的区间进行比
+
+较。它的重载形式允许在比较时忽略大小写。
+
+startsWith( )方法判断一个给定的字符串（String）是否从一个指定的字符串开始。
+
+endsWith( )方法判断所讨论的字符串（String）是否是以一个指定的字符串结尾。
+
+使用concat( )可以连接两个字符串
+
+trim( )方法返回一个调用字符串的拷贝，该字符串是将位于调用字符串前面和后面的空
+
+白符删除后的剩余部分
+
+//StringBuffer
+
+而通过调用capacity( )方法可
+
+以得到总的分配容量
+
+ensureCapacity( ) 设置缓冲区的大小。这在事先已知要在StringBuffer上追加大量小字符串的情况下是有用的
+
+void setLength(int len) 
+
+这里len指定了缓冲区的长度。这个值必须是非负的。
+
+reverse( ) 
+
+## RunTime
+
+void addShutdownHook(Thread thrd) 
+
+当Java虚拟机终止时，寄存器thrd作为线程而运行
+
+
 
