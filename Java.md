@@ -934,13 +934,15 @@ volatile无法描述同步的处理，它只是一种直接内存的处理，避
 
 ## 序列化
 
-Serializable接口
+## Serializable接口
 
-Exteranlizable接口
+## Exteranlizable接口
+
+实现`Externalizable`接口的类必须要提供⼀个`public`的⽆参的构造器。
 
 static全局变量不会被序列化
 
-
+可序列化类的所有⼦类型本⾝都是可序列化的
 
 ## strictfp关键字
 
@@ -2043,4 +2045,31 @@ void addShutdownHook(Thread thrd)
 当Java虚拟机终止时，寄存器thrd作为线程而运行
 
 
+
+
+
+# 单例设计模式 双重校验锁
+
+```java
+public class Singleton {  
+    private volatile static Singleton singleton;  
+    private Singleton (){}  
+    public static Singleton getSingleton() {  
+    if (singleton == null) {  
+        synchronized (Singleton.class) {  
+        if (singleton == null) {  
+            singleton = new Singleton();  
+        }  
+        }  
+    }  
+    return singleton;  
+    }  
+    
+    private Object readResolve() {
+        return singleton;
+    }
+}  
+```
+
+主要在Singleton中定义readResolve方法，并在该方法中指定要返回的对象的生成策略，就可以防止单例被破坏。
 

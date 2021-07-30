@@ -1,3 +1,5 @@
+http://hollischuang.gitee.io/tobetopjavaer/#/
+
 多态分类：
 
 （动态多态）
@@ -72,3 +74,244 @@ class UserDaoProxy implements IUserDao{
 
 
 继承的根本原因是因为要*复用*，而实现的根本原因是需要定义一个*标准*
+
+
+
+
+
+## 三目运算：
+
+```
+Map<String,Boolean> map =  new HashMap<String, Boolean>();
+Boolean b = (map!=null ? map.get("Hollis") : false);
+```
+
+**因为以上代码，在小于JDK 1.8的版本中执行的结果是NPE，在JDK 1.8 及以后的版本中执行结果是null。**
+
+JLS 15中对条件表达式（三目运算符）做了细分之后分为三种，区分方式：
+
+> 如果表达式的第二个和第三个操作数都是布尔表达式，那么该条件表达式就是布尔表达式
+>
+> 如果表达式的第二个和第三个操作数都是数字型表达式，那么该条件表达式就是数字型表达式
+>
+> 除了以上两种以外的表达式就是引用表达式
+
+又跟据JLS15.25.3中规定：
+
+> 如果引用条件表达式出现在赋值上下文或调用上下文中，那么条件表达式就是合成表达式
+
+```
+Boolean b = maps == null ? Boolean.valueOf(false) : (Boolean)maps.get("Hollis");
+```
+
+但是在Java 7中可没有这些规定（Java 8之前的类型推断功能还很弱），编译器只知道表达式的第二位和第三位分别是基本类型和包装类型，而无法推断最终表达式类型。
+
+```
+Boolean b = Boolean.valueOf(maps == null ? false : ((Boolean)maps.get("Hollis")).booleanValue());
+```
+
+所以，相比Java 8中多了一步自动拆箱，所以会导致NPE。
+
+其中的 Javadoc 详细的说明了缓存支持 -128 到 127 之间的自动装箱过程。最大值 127 可以通过 `-XX:AutoBoxCacheMax=size` 修改。
+
+实际上这个功能在 Java 5 中引入的时候,范围是固定的 -128 至 +127。后来在 Java 6 中，可以通过 `java.lang.Integer.IntegerCache.high` 设置最大值。
+
+
+
+缺点：
+
+包装对象的数值比较，不能简单的使用 `==`，虽然 -128 到 127 之间的数字可以，但是这个范围之外还是需要使用 `equals` 比较。
+
+前面提到，有些场景会进行自动拆装箱，同时也说过，由于自动拆箱，如果包装类对象为 null ，那么自动拆箱时就有可能抛出 NPE。
+
+如果一个 for 循环中有大量拆装箱操作，会浪费很多资源。
+
+
+
+
+
+## StringBuilder<StringBuffer<concat<+<StringUtils.join
+
+StringBuffer在StringBuilder的基础上，做了同步处理，所以在耗时上会相对多一些。
+
+StringUtils.join也是使用了StringBuilder，并且其中还是有很多其他操作，所以耗时较长，这个也容易理解。其实StringUtils.join更擅长处理字符串数组或者列表的拼接。
+
+
+
+## 字符串常量池的位置
+在JDK 7以前的版本中，字符串常量池是放在永久代中的。
+
+因为按照计划，JDK会在后续的版本中通过元空间来代替永久代，所以首先在JDK 7中，将字符串常量池先从永久代中移出，暂时放到了堆内存中。
+
+在JDK 8中，彻底移除了永久代，使用元空间替代了永久代，于是字符串常量池再次从堆内存移动到永久代中
+
+
+
+## 常量池
+
+在Java体系中，共用三种常量池。分别是**字符串常量池**、**Class常量池**和**运行时常量池**。
+
+常量池中主要存放两大类常量：字面量（literal）和符号引用（symbolic references）
+
+根据Java虚拟机规范约定：每一个运行时常量池都在Java虚拟机的方法区中分配，在加载类和接口到虚拟机后，就创建对应的运行时常量池。
+
+## intern的功能很简单：
+
+在每次赋值的时候使用 String 的 intern 方法，如果常量池中有相同值，就会重复使用该对象，返回对象引用。
+
+
+
+Set类
+
+1、TreeSet 是二叉树实现的，TreeSet中的数据是自动排好序的，不允许放入 null值
+2、HashSet 是哈希表实现的，HashSet中的数据是无序的，可以放入 null值，但只能放入一个null，两者中的值都不能重复，就如数据库中的唯一约束
+
+
+
+## SynchronizedList和Vector的区别
+
+1.Vector使用同步方法实现，synchronizedList使用同步代码块实现。 
+
+2.两者的扩充数组容量方式不一样（两者的add方法在扩容方面的差别也就是ArrayList和Vector的差别。
+
+SynchronizedList和Vector的区别目前为止有两点： 1.如果使用add方法，那么他们的扩容机制不一样。 2.SynchronizedList可以指定锁定的对象。
+
+ **但是**SynchronizedList中实现的类并没有都使用synchronized同步代码块。其中有listIterator和listIterator(int index)并没有做同步处理。但是Vector却对该方法加了方法锁。 所以说，在使用SynchronizedList进行遍历的时候要手动加锁。
+
+**总结**
+
+ 1.SynchronizedList有很好的扩展和兼容功能。他可以将所有的List的子类转成线程安全的类。 2.使用SynchronizedList的时候，进行遍历时要手动进行同步处理。 3.SynchronizedList可以指定锁定的对象。
+
+
+
+**同步代码块和同步方法的区别**
+
+1.同步代码块在锁定的范围上可能比同步方法要小，一般来说锁的范围大小和性能是成反比的。
+
+2.同步块可以更加精确的控制锁的作用域（锁的作用域就是从锁被获取到其被释放的时间），同步方法的锁的作用域就是整个方法。
+
+3.同步代码块可以选择对哪个对象加锁，但是静态方法只能给this对象加锁。
+
+
+
+## HashMap中hash方法的原理
+
+直接定址法：直接以关键字k或者k加上某个常数（k+c）作为哈希地址。
+
+数字分析法：提取关键字中取值比较均匀的数字作为哈希地址。
+
+除留余数法：用关键字k除以某个不大于哈希表长度m的数p，将所得余数作为哈希表地址。
+
+分段叠加法：按照哈希表地址位数将关键字分成位数相等的几部分，其中最后一部分可以比较短。然后将这几部分相加，舍弃最高进位后的结果就是该关键字的哈希地址。
+
+平方取中法：如果关键字各个部分分布都不均匀的话，可以先求出它的平方值，然后按照需求取中间的几位作为哈希地址。
+
+伪随机数法：采用一个伪随机数当作哈希函数。
+
+解决哈希碰撞：
+
+- 开放定址法：
+  - 开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。
+- 链地址法
+  - 将哈希表的每个单元作为链表的头结点，所有哈希地址为i的元素构成一个同义词链表。即发生冲突时就把该关键字链在以该单元为头结点的链表的尾部。
+- 再哈希法
+  - 当哈希地址发生冲突用其他的函数计算另一个哈希函数地址，直到冲突不再产生为止。
+- 建立公共溢出区
+  - 将哈希表分为基本表和溢出表两部分，发生冲突的元素都放入溢出表中。
+
+
+
+## Stream有以下特性及优点：
+
+- 无存储。Stream不是一种数据结构，它只是某种数据源的一个视图，数据源可以是一个数组，Java容器或I/O channel等。
+- 为函数式编程而生。对Stream的任何修改都不会修改背后的数据源，比如对Stream执行过滤操作并不会删除被过滤的元素，而是会产生一个不包含被过滤元素的新Stream。
+- 惰式执行。Stream上的操作并不会立即执行，只有等到用户真正需要结果的时候才会执行。
+- 可消费性。Stream只能被“消费”一次，一旦遍历过就会失效，就像容器的迭代器那样，想要再次遍历必须重新生成。
+
+
+
+Stream s = strings.stream().filter(string -> string.length()<= 6)
+
+.map(String::length.sorted().limit(3).distinct();
+
+**filter**
+
+filter 方法用于通过设置的条件过滤出元素
+
+**map**
+
+map 方法用于映射每个元素到对应的结果
+
+**distinct**
+
+distinct主要用来去重
+
+**limit/skip**
+
+limit 返回 Stream 的前面 n 个元素；skip 则是扔掉前 n 个元素。
+
+**forEach**
+
+Stream 提供了方法 'forEach' 来迭代流中的每个数据。
+
+**count**
+
+count用来统计流中的元素个数。
+
+**collect**
+
+collect就是一个归约操作，可以接受各种做法作为参数，将流中的元素累积成一个汇总结果
+
+
+
+asList 得到的只是一个 Arrays 的内部类，一个原来数组的视图 List，因此如果对它进行增删操作会报错
+
+用 ArrayList 的构造器可以将其转变成真正的 ArrayList
+
+
+
+//Iterator遍历
+Iterator it = list.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+
+//Stream 遍历
+list.forEach(System.out::println);
+
+list.stream().forEach(System.out::println);
+
+
+
+## ConcurrentSkipListMap 和 ConcurrentHashMap 的主要区别： 
+
+a.底层实现方式不同。ConcurrentSkipListMap底层基于跳表。ConcurrentHashMap底层基于Hash桶和红黑树。 
+
+b.ConcurrentHashMap不支持排序。ConcurrentSkipListMap支持排序。
+
+
+
+
+
+## 输出 
+
+PrintWriter pw = new PrintWriter(System.out, true); 
+
+
+
+## 动态代理：
+
+JDK动态代理和Cglib动态代理的区别
+
+JDK的动态代理有一个限制，就是使用动态代理的对象必须实现一个或多个接口。如果想代理没有实现接口的类，就可以使用CGLIB实现。
+
+Cglib是一个强大的高性能的代码生成包，它可以在运行期扩展Java类与实现Java接口。它广泛的被许多AOP的框架使用，例如Spring AOP和dynaop，为他们提供方法的interception（拦截）。
+
+Cglib包的底层是通过使用一个小而快的字节码处理框架ASM，来转换字节码并生成新的类。不鼓励直接使用ASM，因为它需要你对JVM内部结构包括class文件的格式和指令集都很熟悉。
+
+Cglib与动态代理最大的区别就是：
+
+使用动态代理的对象必须实现一个或多个接口
+
+使用cglib代理的对象则无需实现接口，达到代理类无侵入。
+
