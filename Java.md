@@ -550,6 +550,10 @@ WWW.BING.COM
 
 # 线程
 
+状态：NEW、RUNNABLE、BLOCKED, WAITING、TIMED_WAITING、TERMINATED
+
+
+
 程序：是为了完成特定任务、用某种语言编写的一组指令的集合。即指一段静态的代码，静态对象。
 
 进程：是程序的一次执行过程，或是正在运行的一个程序。是一个动态的过程：有它自身的产生、存在和小王的过程 --生命周期 说明：进程作为资源分配的单位，系统在运行时会为每个进程分配不同的内存区域
@@ -643,7 +647,6 @@ Callable接口提供有call()方法，可以有返回值；
 方法四：
 
  * 创建线程的方式四：使用线程池
- *
 
  * 好处：
 
@@ -655,12 +658,83 @@ Callable接口提供有call()方法，可以有返回值；
 
  * corePoolSize：核心池的大小
 
- * maximumPoolSize：最大线程数
+ * maximumPoolSize：池中允许的最大线程数。
 
  * keepAliveTime：线程没有任务时最多保持多长时间后会终止
 
+ * unit：keepAliveTime 参数的时间单位
+
+ * workQueue：当线程数目超过核心线程数时用于保存任务的队列
+
+   - 无界队列：
    
+     LinkedBlockingQueue无界队列（大量新任务堆积最终导致OOM）
    
+   - 有界队列：
+   
+     ArrayBlockingQueue（FIFO原则）、LinkedBlockingQueue（有界）
+   
+     PriorityBlockingQueue（优先级队列）
+   
+     使用有界队列时队列大小需和线程池大小互相配合，线程池较小有界队列较大时可减少内存消耗，降低cpu使用率和上下文切换，但是可能会限制系统吞吐量。
+   
+   - 同步移交队列：
+   
+     SynchronousQueue（等待队列）
+   
+     要将一个元素放入SynchronousQueue中，必须有另一个线程正在等待接收这个元素。只有在使用无界线程池或者有饱和策略时才建议使用该队列。
+   
+ * threadFactory：执行程序创建新线程时使用的工厂
+
+ * handler：阻塞队列已满且线程数达到最大值时所采取的饱和策略：
+
+   ​					中止、抛弃、抛弃最旧的、调用者运行
+
+   - AbortPolicy中止策略（默认）
+
+     ```java
+     public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+                 throw new RejectedExecutionException("Task " + r.toString() +
+                                                      " rejected from " +
+                                                      e.toString());
+      } 
+     ```
+
+   - DiscardPolicy抛弃策略
+
+     ```java
+     public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+     }
+     //不做任何处理直接抛弃任务
+     ```
+
+   - DiscardOldestPolicy抛弃旧任务策略
+
+     ```java
+     public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+                 if (!e.isShutdown()) {
+                     e.getQueue().poll();
+                     e.execute(r);
+                 }
+     } 
+     //先将阻塞队列中的头元素出队抛弃，再尝试提交任务。如果此时阻塞队列使
+     //用PriorityBlockingQueue优先级队列，将会导致优先级最高的任务被抛弃，因此不建议将该
+     //种策略配合优先级队列使用。
+     ```
+
+   - CallerRunsPolicy调用者运行
+
+     ```java
+     public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+                 if (!e.isShutdown()) {
+                     r.run();
+                 }
+     } 
+     //既不抛弃任务也不抛出异常，直接运行任务的run方法，换言之将任务回退给调用者来直接运行。使用该策略时线程池饱和后将由调用线程池的主线程自己来执行任务，因此在执行任务的这段时间里主线程无法再提交新任务，从而使线程池中工作线程有时间将正在处理的任务处理完成。
+     ```
+
+     
+
    ```
    //1. 提供指定线程数量的线程池
    ExecutorService service = Executors.newFixedThreadPool(3);
@@ -930,7 +1004,11 @@ volatile主要在属性上使用，而synchronized是在代码快与方法上使
 
 volatile无法描述同步的处理，它只是一种直接内存的处理，避免了副本的操作，而synchronized是同步操作
 
+#### volatile无法同步的原因：
 
+一个变量i被volatile修饰，两个线程想对这个变量修改，都对其进行自增操作也就是i++，i++的过程可以分为三步，首先获取i的值，其次对i的值进行加1，最后将得到的新值写会到缓存中。
+线程A首先得到了i的初始值100，但是还没来得及修改，就阻塞了，这时线程B开始了，它也得到了i的值，由于i的值未被修改，即使是被volatile修饰，主存的变量还没变化，那么线程B得到的值也是100，之后对其进行加1操作，得到101后，将新值写入到缓存中，再刷入主存中。根据可见性的原则，这个主存的值可以被其他线程可见。
+问题来了，线程A已经读取到了i的值为100，也就是说读取的这个原子操作已经结束了，所以这个可见性来的有点晚，线程A阻塞结束后，继续将100这个值加1，得到101，再将值写到缓存，最后刷入主存，所以即便是volatile具有可见性，也不能保证对它修饰的变量具有原子性。
 
 ## 序列化
 
@@ -2073,3 +2151,47 @@ public class Singleton {
 
 主要在Singleton中定义readResolve方法，并在该方法中指定要返回的对象的生成策略，就可以防止单例被破坏。
 
+
+
+## 将普通变量升级为原子变量
+
+```java
+class AtomicIntegerFieldUpdaterTest implements Runnable {
+
+    static Goods phone;
+    static Goods computer;
+
+    AtomicIntegerFieldUpdater<Goods> atomicIntegerFieldUpdater =
+            AtomicIntegerFieldUpdater.newUpdater(Goods.class, "price");
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 10000; i++) {
+            phone.price++;
+            atomicIntegerFieldUpdater.getAndIncrement(computer);
+        }
+    }
+
+    static class Goods {
+        //商品定价
+        volatile int price;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        phone = new Goods();
+        computer = new Goods();
+        AtomicIntegerFieldUpdaterTest atomicIntegerFieldUpdaterTest = new AtomicIntegerFieldUpdaterTest();
+        Thread thread1 = new Thread(atomicIntegerFieldUpdaterTest);
+        Thread thread2 = new Thread(atomicIntegerFieldUpdaterTest);
+        thread1.start();
+        thread2.start();
+        //join()方法是为了让main主线程等待thread1、thread2两个子线程执行完毕
+        thread1.join();
+        thread2.join();
+        System.out.println("CommonInteger price = " + phone.price);
+        System.out.println("AtomicInteger price = " + computer.price);
+    }
+}
+```
+
+在高并发情况下，LongAdder(累加器)比AtomicLong原子操作效率更高，LongAdder累加器是java8新加入的。在高度并发竞争情形下，AtomicLong每次进行add都需要flush和refresh（这一块涉及到java内存模型中的工作内存和主内存的，所有变量操作只能在工作内存中进行，然后写回主内存，其它线程再次读取新值），每次add()都需要同步，在高并发时会有比较多冲突，比较耗时导致效率低；而LongAdder中每个线程会维护自己的一个计数器，在最后执行LongAdder.sum()方法时候才需要同步，把所有计数器全部加起来，不需要flush和refresh操作。

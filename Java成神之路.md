@@ -315,3 +315,18 @@ Cglib与动态代理最大的区别就是：
 
 使用cglib代理的对象则无需实现接口，达到代理类无侵入。
 
+
+
+# Java 集合框架
+
+```java
+@SafeVarargs
+public static <T> List<T> asList(T... a)
+
+Integer[] arr = {1, 2, 3};
+List list = Arrays.asList(arr);
+```
+
+应该注意的是 asList() 的参数为泛型的变长参数，不能使用基本类型数组作为参数，只能使用相应的包装类型数组。
+
+Collection 继承了 Iterable 接口，其中的 iterator() 方法能够产生一个 Iterator 对象，通过这个对象就可以迭代遍历 Collection 中的元素。
