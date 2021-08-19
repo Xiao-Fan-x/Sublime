@@ -1,14 +1,14 @@
-创建用户：create USER 用户名@IP地址 IDENTIFIED BY '密码'  //指定IP地址
+创建用户：create USER 用户名@IP地址 IDENTIFIED BY '密码' //指定IP地址
 
 CREATE USER 用户名@'%' IDENTIFIED BY '密码'
 
 授予用户权限
 
-GRANT 权限1,权限2,权限3... ON 数据库.* TO  用户名@IP地址
+GRANT 权限1,权限2,权限3... ON 数据库.* TO 用户名@IP地址
 
 撤销用户权限：
 
-REVOKE  权限1,权限2,权限3... ON 数据库.* FROM  用户名@IP地址
+REVOKE 权限1,权限2,权限3... ON 数据库.* FROM 用户名@IP地址
 
 查看用户权限：
 
@@ -17,8 +17,6 @@ SHOW GRANTS FOR 用户名@IP地址
 删除用户：
 
 DROP USER 用户名@IP地址
-
-
 
 修改root密码
 
@@ -32,11 +30,7 @@ DB操作：show databases;
 
 删除DB：drop database name;
 
-
-
 查看表结构：discribe + 表名称
-
-
 
 显示集合：SELECT DISTINCT *column_name*,*column_name* FROM *table_name*;
 
@@ -63,13 +57,11 @@ MySQL的约束：
 | ---------- | ----------- | ------- | ------ | ----------- | -------- |
 | 关键字：   | PRIMARY KEY | DEFAULT | UNIQUE | FOREIGN KEY | NOT NULL |
 
-
-
 CREATE TABLE 表名（
 
-id 	int(10) 	**PRIMARY KEY**,  //主键
+id int(10)    **PRIMARY KEY**, //主键
 
-name CHAR(20)	
+name CHAR(20)
 
 ）
 
@@ -87,15 +79,11 @@ people_num INT(10) **DEFAULT 10,**
 
 非空约束 (NOT NULL),听名字就能理解，被非空约束的列，在插入值时必须非空。
 
-
-
 ## 删除数据库
 
 目前 Mysql 没有提供修改数据库名称的方法，因为这曾导致一系列安全问题。
 
 在老版本中 RENAME DATABASE 可以修改数据库名称，这条命令在 MySQL 5.1.7 中被加入，但官方很快就发现这条命令所带来的危险，于是在 MySQL 5.1.23 中把这条命令移除。
-
-
 
 #### 修改表名
 
@@ -107,17 +95,17 @@ ALTER TABLE 原名 RENAME TO 新名;
 
 #### 添加一列
 
-ALTER TABLE 表名字 ADD COLUMN 列名字 数据类型 约束; 
+ALTER TABLE 表名字 ADD COLUMN 列名字 数据类型 约束;
 
-或： ALTER TABLE 表名字 ADD 列名字 数据类型 约束  （FIRST | AFTER xxx); 
+或： ALTER TABLE 表名字 ADD 列名字 数据类型 约束 （FIRST | AFTER xxx);
 
 默认在最后
 
 #### 删除一列
 
-ALTER TABLE 表名字 DROP COLUMN 列名字;    
+ALTER TABLE 表名字 DROP COLUMN 列名字;
 
- 或： ALTER TABLE 表名字 DROP 列名字;
+或： ALTER TABLE 表名字 DROP 列名字;
 
 #### 重命名一列
 
@@ -143,9 +131,7 @@ SELECT （* | 要查询的列名 ）FROM 表名字 WHERE 限制条件;
 
 限制条件不止一个可以使用AND和OR进行判断
 
-BETWEEN  A   AND  B
-
-
+BETWEEN A AND B
 
 关键词 **IN** 和 **NOT IN** 的作用和它们的名字一样明显，用于筛选**“在”**或**“不在”**某个范围内的结果
 
@@ -155,9 +141,8 @@ BETWEEN  A   AND  B
 
 #### 排序
 
-为了使查询结果看起来更顺眼，我们可能需要对结果按某一列来排序，这就要用到 **ORDER BY** 排序关键词。默认情况下，**ORDER BY** 的结果是**升序**排列，而使用关键词 **ASC** 和 **DESC** 可指定**升序**或**降序**排序。
-
-
+为了使查询结果看起来更顺眼，我们可能需要对结果按某一列来排序，这就要用到 **ORDER BY** 排序关键词。默认情况下，**ORDER BY** 的结果是**升序**排列，而使用关键词 **ASC** 和 **DESC** 可指定**
+升序**或**降序**排序。
 
 SQL 允许对表中的数据进行计算。对此，SQL 有 5 个内置函数，这些函数都对 SELECT 的结果做操作：
 
@@ -171,17 +156,15 @@ SELECT MAX(salary) AS max_salary,MIN(salary) FROM employee;
 
 **使用 AS 关键词可以给值重命名**，比如最大值被命名为了 max_salary：
 
-
-
 ### 分组查询
 
-GROUP BY 
+GROUP BY
 
 #### 子查询
 
 想要知道名为 "Tom" 的员工所在部门做了几个工程。员工信息储存在 employee 表中，但工程信息储存在 project 表中。
 
-SELECT of_dpt,COUNT(proj_name) AS count_project FROM project GROUP BY of_dpt 
+SELECT of_dpt,COUNT(proj_name) AS count_project FROM project GROUP BY of_dpt
 
 HAVING of_dpt IN
 
@@ -189,52 +172,41 @@ HAVING of_dpt IN
 
 #### 连接查询
 
-SELECT id,name,people_num 
+SELECT id,name,people_num
 
-FROM employee,department 
+FROM employee,department
 
-WHERE employee.in_dpt = department.dpt_name 
-
-ORDER BY id;
-
-
-
-SELECT id,name,people_num 
-
-FROM employee JOIN department 
-
-ON employee.in_dpt = department.dpt_name 
+WHERE employee.in_dpt = department.dpt_name
 
 ORDER BY id;
 
+SELECT id,name,people_num
 
+FROM employee JOIN department
+
+ON employee.in_dpt = department.dpt_name
+
+ORDER BY id;
 
 CONCAT(xxx,xxx) 连接操作
 
 IFNULL(a,b)如果为NULL a->b
 
-
-
 ## 编码字符集问题
 
 查看：
 
-  方法一：show variables like '%character%';
-  方法二：show variables like 'collation%';
-
-
+方法一：show variables like '%character%'; 方法二：show variables like 'collation%';
 
 default-character-set=utf8
 
 ### 备份
 
-导出：mysqldump -uroot -p123456  数据库名>地址
+导出：mysqldump -uroot -p123456 数据库名>地址
 
 导入：mysql -uroot -p123456 数据库名<地址
 
 导入：source 地址
-
-
 
 ## 外键
 

@@ -10,8 +10,6 @@ http://hollischuang.gitee.io/tobetopjavaer/#/
 
 子类型：父类的引用指向子类的对象
 
-
-
 继承、组合、代理
 
 ```java
@@ -65,19 +63,13 @@ class UserDaoProxy implements IUserDao{
 
 1、被重载的方法必须改变参数列表； 2、被重载的方法可以改变返回类型； 3、被重载的方法可以改变访问修饰符； 4、被重载的方法可以声明新的或更广的检查异常； 5、方法能够在同一个类中或者在一个子类中被重载。
 
-
-
 重写：指的是在Java的子类与父类中有两个名称、参数列表都相同的方法的情况。由于他们具有相同的方法签名，所以子类中的新方法将覆盖父类中原有的方法。
 
-1、参数列表必须完全与被重写方法的相同； 2、返回类型必须完全与被重写方法的返回类型相同； 3、访问级别的限制性一定不能比被重写方法的强； 4、访问级别的限制性可以比被重写方法的弱； 5、重写方法一定不能抛出新的检查异常或比被重写的方法声明的检查异常更广泛的检查异常 6、重写的方法能够抛出更少或更有限的异常（也就是说，被重写的方法声明了异常，但重写的方法可以什么也不声明） 7、不能重写被标示为final的方法； 8、如果不能继承一个方法，则不能重写这个方法。
-
-
+1、参数列表必须完全与被重写方法的相同； 2、返回类型必须完全与被重写方法的返回类型相同； 3、访问级别的限制性一定不能比被重写方法的强； 4、访问级别的限制性可以比被重写方法的弱；
+5、重写方法一定不能抛出新的检查异常或比被重写的方法声明的检查异常更广泛的检查异常 6、重写的方法能够抛出更少或更有限的异常（也就是说，被重写的方法声明了异常，但重写的方法可以什么也不声明） 7、不能重写被标示为final的方法；
+8、如果不能继承一个方法，则不能重写这个方法。
 
 继承的根本原因是因为要*复用*，而实现的根本原因是需要定义一个*标准*
-
-
-
-
 
 ## 三目运算：
 
@@ -116,8 +108,6 @@ Boolean b = Boolean.valueOf(maps == null ? false : ((Boolean)maps.get("Hollis"))
 
 实际上这个功能在 Java 5 中引入的时候,范围是固定的 -128 至 +127。后来在 Java 6 中，可以通过 `java.lang.Integer.IntegerCache.high` 设置最大值。
 
-
-
 缺点：
 
 包装对象的数值比较，不能简单的使用 `==`，虽然 -128 到 127 之间的数字可以，但是这个范围之外还是需要使用 `equals` 比较。
@@ -126,26 +116,19 @@ Boolean b = Boolean.valueOf(maps == null ? false : ((Boolean)maps.get("Hollis"))
 
 如果一个 for 循环中有大量拆装箱操作，会浪费很多资源。
 
-
-
-
-
 ## StringBuilder<StringBuffer<concat<+<StringUtils.join
 
 StringBuffer在StringBuilder的基础上，做了同步处理，所以在耗时上会相对多一些。
 
 StringUtils.join也是使用了StringBuilder，并且其中还是有很多其他操作，所以耗时较长，这个也容易理解。其实StringUtils.join更擅长处理字符串数组或者列表的拼接。
 
-
-
 ## 字符串常量池的位置
+
 在JDK 7以前的版本中，字符串常量池是放在永久代中的。
 
 因为按照计划，JDK会在后续的版本中通过元空间来代替永久代，所以首先在JDK 7中，将字符串常量池先从永久代中移出，暂时放到了堆内存中。
 
 在JDK 8中，彻底移除了永久代，使用元空间替代了永久代，于是字符串常量池再次从堆内存移动到永久代中
-
-
 
 ## 常量池
 
@@ -159,30 +142,26 @@ StringUtils.join也是使用了StringBuilder，并且其中还是有很多其他
 
 在每次赋值的时候使用 String 的 intern 方法，如果常量池中有相同值，就会重复使用该对象，返回对象引用。
 
-
-
 Set类
 
-1、TreeSet 是二叉树实现的，TreeSet中的数据是自动排好序的，不允许放入 null值
-2、HashSet 是哈希表实现的，HashSet中的数据是无序的，可以放入 null值，但只能放入一个null，两者中的值都不能重复，就如数据库中的唯一约束
-
-
+1、TreeSet 是二叉树实现的，TreeSet中的数据是自动排好序的，不允许放入 null值 2、HashSet 是哈希表实现的，HashSet中的数据是无序的，可以放入
+null值，但只能放入一个null，两者中的值都不能重复，就如数据库中的唯一约束
 
 ## SynchronizedList和Vector的区别
 
-1.Vector使用同步方法实现，synchronizedList使用同步代码块实现。 
+1.Vector使用同步方法实现，synchronizedList使用同步代码块实现。
 
 2.两者的扩充数组容量方式不一样（两者的add方法在扩容方面的差别也就是ArrayList和Vector的差别。
 
 SynchronizedList和Vector的区别目前为止有两点： 1.如果使用add方法，那么他们的扩容机制不一样。 2.SynchronizedList可以指定锁定的对象。
 
- **但是**SynchronizedList中实现的类并没有都使用synchronized同步代码块。其中有listIterator和listIterator(int index)并没有做同步处理。但是Vector却对该方法加了方法锁。 所以说，在使用SynchronizedList进行遍历的时候要手动加锁。
+**但是**SynchronizedList中实现的类并没有都使用synchronized同步代码块。其中有listIterator和listIterator(int index)并没有做同步处理。但是Vector却对该方法加了方法锁。
+所以说，在使用SynchronizedList进行遍历的时候要手动加锁。
 
 **总结**
 
- 1.SynchronizedList有很好的扩展和兼容功能。他可以将所有的List的子类转成线程安全的类。 2.使用SynchronizedList的时候，进行遍历时要手动进行同步处理。 3.SynchronizedList可以指定锁定的对象。
-
-
+1.SynchronizedList有很好的扩展和兼容功能。他可以将所有的List的子类转成线程安全的类。 2.使用SynchronizedList的时候，进行遍历时要手动进行同步处理。
+3.SynchronizedList可以指定锁定的对象。
 
 **同步代码块和同步方法的区别**
 
@@ -191,8 +170,6 @@ SynchronizedList和Vector的区别目前为止有两点： 1.如果使用add方�
 2.同步块可以更加精确的控制锁的作用域（锁的作用域就是从锁被获取到其被释放的时间），同步方法的锁的作用域就是整个方法。
 
 3.同步代码块可以选择对哪个对象加锁，但是静态方法只能给this对象加锁。
-
-
 
 ## HashMap中hash方法的原理
 
@@ -211,15 +188,13 @@ SynchronizedList和Vector的区别目前为止有两点： 1.如果使用add方�
 解决哈希碰撞：
 
 - 开放定址法：
-  - 开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。
+    - 开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。
 - 链地址法
-  - 将哈希表的每个单元作为链表的头结点，所有哈希地址为i的元素构成一个同义词链表。即发生冲突时就把该关键字链在以该单元为头结点的链表的尾部。
+    - 将哈希表的每个单元作为链表的头结点，所有哈希地址为i的元素构成一个同义词链表。即发生冲突时就把该关键字链在以该单元为头结点的链表的尾部。
 - 再哈希法
-  - 当哈希地址发生冲突用其他的函数计算另一个哈希函数地址，直到冲突不再产生为止。
+    - 当哈希地址发生冲突用其他的函数计算另一个哈希函数地址，直到冲突不再产生为止。
 - 建立公共溢出区
-  - 将哈希表分为基本表和溢出表两部分，发生冲突的元素都放入溢出表中。
-
-
+    - 将哈希表分为基本表和溢出表两部分，发生冲突的元素都放入溢出表中。
 
 ## Stream有以下特性及优点：
 
@@ -227,8 +202,6 @@ SynchronizedList和Vector的区别目前为止有两点： 1.如果使用add方�
 - 为函数式编程而生。对Stream的任何修改都不会修改背后的数据源，比如对Stream执行过滤操作并不会删除被过滤的元素，而是会产生一个不包含被过滤元素的新Stream。
 - 惰式执行。Stream上的操作并不会立即执行，只有等到用户真正需要结果的时候才会执行。
 - 可消费性。Stream只能被“消费”一次，一旦遍历过就会失效，就像容器的迭代器那样，想要再次遍历必须重新生成。
-
-
 
 Stream s = strings.stream().filter(string -> string.length()<= 6)
 
@@ -262,42 +235,25 @@ count用来统计流中的元素个数。
 
 collect就是一个归约操作，可以接受各种做法作为参数，将流中的元素累积成一个汇总结果
 
-
-
 asList 得到的只是一个 Arrays 的内部类，一个原来数组的视图 List，因此如果对它进行增删操作会报错
 
 用 ArrayList 的构造器可以将其转变成真正的 ArrayList
 
+//Iterator遍历 Iterator it = list.iterator(); while (it.hasNext()) { System.out.println(it.next()); }
 
-
-//Iterator遍历
-Iterator it = list.iterator();
-while (it.hasNext()) {
-    System.out.println(it.next());
-}
-
-//Stream 遍历
-list.forEach(System.out::println);
+//Stream 遍历 list.forEach(System.out::println);
 
 list.stream().forEach(System.out::println);
 
+## ConcurrentSkipListMap 和 ConcurrentHashMap 的主要区别：
 
-
-## ConcurrentSkipListMap 和 ConcurrentHashMap 的主要区别： 
-
-a.底层实现方式不同。ConcurrentSkipListMap底层基于跳表。ConcurrentHashMap底层基于Hash桶和红黑树。 
+a.底层实现方式不同。ConcurrentSkipListMap底层基于跳表。ConcurrentHashMap底层基于Hash桶和红黑树。
 
 b.ConcurrentHashMap不支持排序。ConcurrentSkipListMap支持排序。
 
+## 输出
 
-
-
-
-## 输出 
-
-PrintWriter pw = new PrintWriter(System.out, true); 
-
-
+PrintWriter pw = new PrintWriter(System.out, true);
 
 ## 动态代理：
 
@@ -315,8 +271,6 @@ Cglib与动态代理最大的区别就是：
 
 使用cglib代理的对象则无需实现接口，达到代理类无侵入。
 
-
-
 # Java 集合框架
 
 ```java
@@ -330,3 +284,55 @@ List list = Arrays.asList(arr);
 应该注意的是 asList() 的参数为泛型的变长参数，不能使用基本类型数组作为参数，只能使用相应的包装类型数组。
 
 Collection 继承了 Iterable 接口，其中的 iterator() 方法能够产生一个 Iterator 对象，通过这个对象就可以迭代遍历 Collection 中的元素。
+
+## 得到一个线程安全的 ArrayList。
+
+```java
+List<String> list = new ArrayList<>();
+List<String> synList = Collections.synchronizedList(list);
+```
+
+也可以使用 concurrent 并发包下的 CopyOnWriteArrayList 类。
+
+```java
+List<String> list = new CopyOnWriteArrayList<>();
+```
+
+但是 CopyOnWriteArrayList 有其缺陷：
+
+- 内存占用：在写操作时需要复制一个新的数组，使得内存占用为原来的两倍左右；
+- 数据不一致：读操作不能读取实时性的数据，因为部分写操作的数据还未同步到读数组中。
+
+所以 CopyOnWriteArrayList 不适合内存敏感以及对实时性要求很高的场景
+
+#  
+
+# JVM
+
+是不是所有的对象和数组都会在堆内存分配空间？
+
+不一定，随着JIT编译器的发展，在编译期间，如果JIT经过逃逸分析，发现有些对象没有逃逸出方法，那么有可能堆内存分配会被优化成栈内存分配。但是这也并不是绝对的。就像我们前面看到的一样，在开启逃逸分析之后，也并不是所有User对象都没有在堆上分配。
+
+## 类加载器
+
+Java中提供的这四种类型的加载器，是有各自的职责的：
+
+- Bootstrap ClassLoader ，主要负责加载Java核心类库，%JRE_HOME%\lib下的rt.jar、resources.jar、charsets.jar和class等。
+- Extention ClassLoader，主要负责加载目录%JRE_HOME%\lib\ext目录下的jar包和class文件。
+- Application ClassLoader ，主要负责加载当前应用的classpath下的所有类
+- User ClassLoader ， 用户自定义的类加载器,可加载指定路径的class文件
+
+也就是说，一个用户自定义的类，如com.hollis.ClassHollis 是无论如何也不会被Bootstrap和Extention加载器加载的
+
+#### 好处：
+
+可以避免类的重复加载
+
+保证了安全性
+
+### 关系：
+
+类加载器之间的父子关系一般不会以继承（Inheritance）的关系来实现，而是都使用组合（Composition）关系来复用父加载器的代码的
+
+# JVM内存结构、 Java内存模型 以及 Java对象模型 
+

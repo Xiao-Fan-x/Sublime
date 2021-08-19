@@ -1,28 +1,22 @@
 ## 日志
 
-/var/log/message	全局系统日志，包括登录，对服务启停认证等
+/var/log/message 全局系统日志，包括登录，对服务启停认证等
 
-/var/log/lastlog	不是一个文本文件，需要用lastlog命令读，保存了最近的用户登录信息
+/var/log/lastlog 不是一个文本文件，需要用lastlog命令读，保存了最近的用户登录信息
 
-/var/log/yum,log	最近通过yum安装的程序的日志
+/var/log/yum,log 最近通过yum安装的程序的日志
 
-/var/log/boot.log	启动日志
+/var/log/boot.log 启动日志
 
-/var/log/kern	内核日志，也可以通过dmesg查看
-
-
+/var/log/kern 内核日志，也可以通过dmesg查看
 
 df命令描述：该命令检查文件系统的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。
-
-
 
 ## 用户
 
 umask获取当前用户的默认权限，创建文件、目录时会遵循该权限
 
 文件夹权限和文件权限的不同，会导致在使用命令操作文件时，有所不同
-
-
 
 对文件而言：
 
@@ -36,13 +30,13 @@ umask获取当前用户的默认权限，创建文件、目录时会遵循该权
 - -w 表示可以对此文件夹下的文件进行删除、重命名、移动
 - -x 表示可以将此文件夹作为working dir,或者说表示可以cd到这个文件夹中
 
-修改文件权限：chmod mode file 
+修改文件权限：chmod mode file
 
 - 格式：[ugoa..]\[+-=]\[rwxX]\[...]\[...]
 
 - u表示增加权限，g表示与该文件的拥有者属于同一个群体(group)者，o表示其他以外的人，a表示三者皆是
 
-- ###### + 表示增加权限，-  表是取消权限， =表示唯一设定权限
+- ###### + 表示增加权限，- 表是取消权限， =表示唯一设定权限
 
 - r 表示可读取，w 表示可写入， x 表示可执行， X表示只有当该文件是一个子目录或者该文件已经被设定为可执行
 
@@ -53,10 +47,10 @@ umask获取当前用户的默认权限，创建文件、目录时会遵循该权
 - -h 修复符号链接
 - -v 显示详细的处理信息
 - -R 处理指定目录以及其子目录下的所有文件
--  user：新的文件拥有者的使用者ID
+- user：新的文件拥有者的使用者ID
 - group 新的我年间拥有者的使用者组group
 
- 修改文件的数组： chgrp [-cfhRv] [所属群组] file...
+修改文件的数组： chgrp [-cfhRv] [所属群组] file...
 
 - -c 显示更改的部分的信息
 - -f 忽略错误信息
@@ -65,8 +59,6 @@ umask获取当前用户的默认权限，创建文件、目录时会遵循该权
 - -R 处理指定目录以及其子目录下的所有文件
 - user：新的文件拥有者的使用者ID
 - group 新的我年间拥有者的使用者组group
-
-
 
 ## 特殊权限：suid、sgid、sbid
 
@@ -80,25 +72,19 @@ SUID是set UID的简称，它会出现在文集i俺拥有者权限的执行上�
 
 4.该权限只在程序执行的过程中有效
 
-
-
 SUID是set GID的简称，它会出现在文件所属组权限的执行上，它对普通二进制文件和目录都有效
 
 SGID作用于文件上时，在执行该文件时，用户将获得该属组的权限
 
 SGID作用于目录上时，在该目录下创建的文件，都将属于这个目录的组
 
-
-
 SBIT即Sticky Bit,它出现在其他用户权限的执行位上，它只能用来修饰一个目录
 
 当某一个目录拥有SBIT权限时，则任何一个都能够在这个目录下建立文件的用户，该用户在这个目录下所建立的文件，只有该用户自己和root可以删除，其他用户均不可以
 
-
-
 如何设置SUID、SGID、SBIT
 
-数字方式：  SUID -> 4		SGID -> 2		SBIT -> 1
+数字方式： SUID -> 4 SGID -> 2 SBIT -> 1
 
 设定权限只需要将对应的权限数字相加即可
 
@@ -106,7 +92,7 @@ SBIT即Sticky Bit,它出现在其他用户权限的执行位上，它只能用�
 
 命令方式：
 
-- chmod u+s testfile  #为testfile文件加上SUID权限
-- chmod g+s testfile  #为testfile文件加上SGID权限
-- chmod o+s testfile  #为testfile文件加上SBID权限
+- chmod u+s testfile #为testfile文件加上SUID权限
+- chmod g+s testfile #为testfile文件加上SGID权限
+- chmod o+s testfile #为testfile文件加上SBID权限
 
