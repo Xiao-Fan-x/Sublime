@@ -233,6 +233,112 @@ Object类对象可以接受所有数据类型，包括基本数据类型、类�
 
 ## 代理设计模式（Proxy）
 
+### 静态代理
+
+```java
+interface IMessage {
+    public void send();
+}
+
+class MessageReal implements IMessage {
+    @Override
+    public void send() {
+        System.out.println("发送消息");
+    }
+}
+
+class MessageProxy implements IMessage{
+    private IMessage target;
+
+    public MessageProxy(IMessage target) {
+        this.target = target;
+    }
+
+     public boolean connect(){
+         System.out.println("消息代理：进行消息发送通道的连接");
+         return true;
+    }
+
+    public void close(){
+        System.out.println("关闭消息通道");
+    }
+
+    @Override
+    public void send() {
+        if (this.connect()){
+            this.target.send();
+            this.close();
+        }
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        IMessage message = new MessageReal();
+        MessageProxy messageProxy = new MessageProxy(message);
+        messageProxy.send();
+    }
+}
+```
+
+ 
+
+### 动态代理
+
+```java
+interface IMessage {
+    void send();
+}
+
+class MessageReal implements IMessage {
+    @Override
+    public void send() {
+        System.out.println("发送消息");
+    }
+}
+
+class DynaticProxy implements InvocationHandler {
+    private Object target;
+
+    public Object bind(Object target) {
+        this.target = target;
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(),
+                target.getClass().getInterfaces(), this);
+    }
+
+    public boolean connect(){
+        System.out.println("消息代理：进行消息发送通道的连接");
+        return true;
+    }
+    public void close(){
+        System.out.println("关闭消息通道");
+    }
+
+    @Override
+    public Object invoke(Object pro, Method method, Object[] args) throws Throwable {
+        System.out.println("执行方法"+method);
+        Object returnData = null;
+        if (this.connect()){
+             returnData = method.invoke(this.target,args);
+            this.close();
+
+        }
+        return returnData;
+    }
+}
+
+public class Test02 {
+    public static void main(String[] args) {
+        IMessage msg = (IMessage) new DynaticProxy().bind(new MessageReal());
+        msg.send();
+    }
+}
+```
+
+
+
+
+
 ## 抽象类与接口区别
 
 | 定义关键字 | abstract class 抽象类{} | interface | | ---- | ---- | | 组成 | 构造、普通方法、静态方法、全局常量、普通成员、static方法 |
@@ -2236,4 +2342,108 @@ jasperreports_extension.properties //语言配置
 net.sf.jasperreports.extension.registry.factory.simple.font.families=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory
 net.sf.jasperreports.extension.simple.font.families.dejavu=fonts/fonts.xml
 ```
+
+
+
+# 反射
+
+获得Class对象
+
+```
+A a = new A();
+Class<?> klass = a.class
+Class<?> klass = int.class;
+Class<?> classInt = Integer.TYPE;
+Class<?> klass = Class.forName("")
+```
+
+判断是否为某个类的实例
+
+```
+	
+public native boolean isInstance(Object obj);
+
+```
+
+创建实例
+
+```
+Class<?> c = String.class;
+Object str = c.newInstance();
+//newInstance 在JDK1.9之后废除
+```
+
+```
+//获取String所对应的Class对象
+Class<?> klass = String.class;
+//获取String类带一个String参数的构造器
+Constructor constructor = klass.getConstructor(String.class);
+//根据构造器创建实例
+Object obj = constructor.newInstance("23333");
+System.out.println(obj);
+```
+
+- `getDeclaredMethods` 方法返回类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。
+
+```
+public Method[] getDeclaredMethods() throws SecurityException
+```
+
+- `getMethods` 方法返回某个类的所有公用（public）方法，包括其继承类的公用方法。
+
+```
+public Method[] getMethods() throws SecurityException
+```
+
+- `getMethod` 方法返回一个特定的方法，其中第一个参数为方法名称，后面的参数为方法的参数对应Class的对象。
+
+```
+public Method getMethod(String name, Class<?>... parameterTypes)
+```
+
+获取类的成员变量信息
+
+- `getFiled`：访问公有的成员变量
+- `getDeclaredField`：所有已声明的成员变量，但不能得到其父类的成员变量
+
+ 方法用法同上（参照 Method）。
+
+
+
+## Unsafe
+
+绕过实例化对象的管理
+
+Unsafe只能说为我们的开发提供了一些更加方便的处理机制，但是这中操作由于不受JVM的管理，非必须情况下不建议使用，而讲解这个类主要的目的是帮助大家巩固对反射的理解，同时也帮助大家面试。
+
+```java
+public class UnsafeDemo{
+    public static void main(String[] args) throws Exception{
+        Field field = Unsafe.class.getDeclaredField("theUnsafe");
+        field.setAccessible(true);
+        Unsafe unsafeObject = (Unsafe)field.get(null);
+        //利用Unsafe类绕过了JVM的管理机制，可以在没有实例化对象的情况下获取一个Singletion类实例化对象
+        Singletion instance = (Singletion) unsafeObject.allocateInstance(Singletion.class);
+        instance.print();
+     }
+}
+
+class Singletion{
+//    private static final Singletion INSTANCE = new Singletion();
+//    public Singletion() {
+//    }
+    private Singletion(){
+        System.out.println("Singletion构造");
+    }
+//    public static Singletion getInstance(){
+//        return INSTANCE;
+//    }
+    public void print(){
+        System.out.println("www.baidu.com");
+    }
+}
+
+```
+
+
 
