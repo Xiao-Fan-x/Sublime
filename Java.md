@@ -127,6 +127,37 @@ annotation式从jdk1.5之后提出的一个新的开发技术，利用annotation
 - 所有的操作都需要通过配置文件完成，对于开发的难度提升了 过程三：将配置信息重新写回程序，利用一些特殊的标记与程序代码进行分离，这就是注解的作用，这也就是Annotation的基本依据
 - 如果全部都使用注解开发，难度太高了，配置文件有好处也有坏处，所以现在人们的开发基本上围绕着配置文件以及注解的形式完成的。
 
+
+
+结合反射：
+
+```Java
+@Retention(RetentionPolicy.RUNTIME)
+@interface DefaultAnnotation {
+    String title();
+    String url() default "www.baidu.com";
+}
+
+class Message {
+    @DefaultAnnotation(title = "d")
+    public void send(String msg) {
+        System.out.println("send message" + msg);
+    }
+}
+
+public class Test {
+    public static void main(String[] args) throws Exception{
+        Method method = Message.class.getMethod("send", String.class);
+        DefaultAnnotation annotation = method.getAnnotation(DefaultAnnotation.class);
+        System.out.println(annotation.title());
+        System.out.println(annotation.url());
+
+        String msg = annotation.title()+annotation.url();
+     method.invoke(Message.class.getDeclaredConstructor().newInstance(),msg);
+    }
+}
+```
+
 # 向上转型
 
 向上的主要特点在于，可以对参数进行同意的设计。但是为什么此时不使用重载来解决当前问题呢？
@@ -283,7 +314,7 @@ public class Test {
 
  
 
-### 动态代理
+### 动态代理（Java的动态代理只能用于使用接口的类）
 
 ```java
 interface IMessage {
@@ -334,6 +365,58 @@ public class Test02 {
     }
 }
 ```
+
+CGLIB 实现基于类的代理设计模式
+
+```java
+class Message {
+    public void send() {
+        System.out.println("发送信息");
+    }
+}
+
+class CGLIBProxy implements MethodInterceptor {//拦截器
+    private Object target;
+
+    public CGLIBProxy(Object target) {
+        this.target = target;
+    }
+
+    @Override
+    public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        Object returnData = null;
+        if (this.connect()) {
+            returnData = method.invoke(this.target, args);
+            this.close();
+        }
+        return returnData;
+    }
+
+    public boolean connect() {
+        System.out.println("消息代理：进行消息发送通道的连接");
+        return true;
+    }
+
+    public void close() {
+        System.out.println("关闭消息通道");
+    }
+}
+
+
+public class Test {
+    public static void main(String[] args) {
+        Message01 messageReal = new Message01();
+        Enhancer enhancer = new Enhancer();//负责代理操作的程序类
+
+        enhancer.setSuperclass(messageReal.getClass());
+        enhancer.setCallback(new CGLIBProxy(messageReal));
+        Message01 proxyObject = (Message01) enhancer.create();
+        proxyObject.send();
+    }
+}
+```
+
+
 
 
 
