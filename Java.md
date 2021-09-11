@@ -2540,3 +2540,13 @@ class Singletion{
 
 
 
+## Properties类
+
+public String getProperty(String key)
+
+public String getProperty(String key,String defaultValue)
+
+public void store(OutputStream out,String comments) throws IOException
+
+public void load(InputStream inStream) throws IOException
+

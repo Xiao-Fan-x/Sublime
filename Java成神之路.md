@@ -273,6 +273,20 @@ Cglib与动态代理最大的区别就是：
 
 # Java 集合框架
 
+初始化大小：
+
+ArrayList：10 | *1.5
+
+Vector：10 | *2
+
+TreeSet：
+
+HashSet：
+
+HashTable：11 | *2+1
+
+HashMap：16 | *2
+
 ```java
 @SafeVarargs
 public static <T> List<T> asList(T... a)
