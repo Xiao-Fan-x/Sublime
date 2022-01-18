@@ -20,6 +20,10 @@ git config --show-origin + <key>
 
 git config --show-origin user.name file:C:/Users/Xiaofan/.gitconfig Xiao-Fan-x
 
+文本编辑器
+git config --global core.editor emacs
+
+
 # 获取帮助
 
 $ git help <verb>
@@ -70,6 +74,8 @@ git add 将修改的文件载入暂存区
 将文件从暂存区中撤下： git rm --cached + 文件  (文件仍保留在当前工作目录中，不让 Git 继续跟踪)
 
 查看工作区、暂存区状态：git status
+
+https://github.com/github/gitignore
 
 文件改名操作：git mv file_from file_to
 
