@@ -527,7 +527,7 @@ Lambda格式： 方法没有参数：()->{} 方法有参数：(参数，参数)-
 
  IFunction<String> fun = "www.bing.com" :: toUpperCase;
 
- System.***out\***.println(fun.upper());
+ System.out.println(fun.upper());
 
  }
 
@@ -555,7 +555,7 @@ WWW.BING.COM
 
  IFunction<String> fun = String ::compareTo;
 
- System.***out\***.println(fun.compare("A", "a"));
+ System.out.println(fun.compare("A", "a"));
 
  }
 
@@ -603,7 +603,7 @@ WWW.BING.COM
 
  IFunction<Person> fun = Person :: **new** ;
 
- System.***out\***.println(fun.create("张三", 20));
+ System.out.println(fun.create("张三", 20));
 
  }
 
@@ -1276,6 +1276,7 @@ public BigDecimal divide(BigDecimal divisor, int scale, int roundingMode)
 return BigDecimal(num).divide(new BigDecimal(1.0)）,scale,RoundingMode.HALF_UP),doubleValue();
 
 return Math.round(Math.pow(10,scale)*num)/Math.pow(10,scale);
+
 
 ## Date类
 
