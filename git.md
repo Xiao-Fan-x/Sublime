@@ -89,7 +89,6 @@ $ git add README
 
 
 
-
 查看提交历史：git log
 
 git log 会按时间先后顺序列出所有的提交，最近的更新排在最上面
@@ -99,17 +98,38 @@ git log -p/-patch 现实最近p次的提交
 git log --stat 详细显示修改过的文件内容
 
 
-大苏打盛大的啊实打实大苏打撒旦撒旦我的阿斯顿asddasdadad
-啊大苏打撒旦撒大苏打
+git log --pretty= {} oneline/short/full/fuller/format:"%h - %an, %ar : %s"
 
-的撒大大打发士大夫
+format 常用的选项
+选项 说明
+%H 提交的完整哈希值
+%h 提交的简写哈希值
+%T 树的完整哈希值
+%t 树的简写哈希值
+%P 父提交的完整哈希值
+%p 父提交的简写哈希值
+%an 作者名字
+%ae 作者的电子邮件地址
+%ad 作者修订日期（可以用 --date=选项 来定制格式）
+%ar 作者修订日期，按多久以前的方式显示
+%cn 提交者的名字
+%ce 提交者的电子邮件地址
+%cd 提交日期
+%cr 提交日期（距今多长时间）
+%s 提交说明
 
+--graph 显示ascii分支信息
 
-
-grtghgfdsas
-
-
-dasdsa
-adsdasdasfdsaf dsadasd
-
-adsfgethrsgds
+ git log 的常用选项
+选项 说明
+-p 按补丁格式显示每个提交引入的差异。
+--stat 显示每次提交的文件修改统计信息。
+--shortstat 只显示 --stat 中最后的行数修改添加移除统计。
+--name-only 仅在提交信息后显示已修改的文件清单。
+--name-status 显示新增、修改、删除的文件清单。
+--abbrev-commit 仅显示 SHA-1 校验和所有 40 个字符中的前几个字符。
+--relative-date 使用较短的相对时间而不是完整格式显示日期（比如“2 weeks ago”）。
+--graph 在日志旁以 ASCII 图形显示分支与合并历史。
+--pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline、short、full、fuller 和
+format（用来定义自己的格式）。
+--oneline --pretty=oneline --abbrev-commit 合用的简写。
