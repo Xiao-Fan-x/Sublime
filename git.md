@@ -133,3 +133,26 @@ format 常用的选项
 --pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline、short、full、fuller 和
 format（用来定义自己的格式）。
 --oneline --pretty=oneline --abbrev-commit 合用的简写。
+
+
+git log 输出的选项
+选项 说明
+-<n> 仅显示最近的 n 条提交。
+--since, --after 仅显示指定时间之后的提交。
+--until, --before 仅显示指定时间之前的提交。
+--author 仅显示作者匹配指定字符串的提交。
+--committer 仅显示提交者匹配指定字符串的提交。
+--grep 仅显示提交说明中包含指定字符串的提交。
+-S 仅显示添加或删除内容匹配指定字符串的提交。
+
+ git commit --amend
+将暂存区中的文件提交，第二次提交将代替第一次提交的结果
+$ git commit -m 'initial commit'
+$ git add forgotten_file
+$ git commit --amend
+
+取消暂存的文件
+git reset HEAD <file>
+
+撤销未暂存区域
+git checkout -- <file>...

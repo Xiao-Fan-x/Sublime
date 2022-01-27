@@ -1,5 +1,7 @@
 创建用户：create USER 用户名@IP地址 IDENTIFIED BY '密码' //指定IP地址
 
+修改密码：alter user '用户名'@'主机名' identified by '密码'	
+
 CREATE USER 用户名@'%' IDENTIFIED BY '密码'
 
 授予用户权限
@@ -218,11 +220,64 @@ default-character-set=utf8
 
 一张表可以有多个外键
 
+删除/更新行为
+no action / restrict 检查是否有对应外键，如果有则不允许删除/更新
+cascade 检查是否有对应外键，如果有也删除/更新外键在子表的记录
+set null 检查是否有对应外键，如果有则设置子集中改外键值为null（要求外键允许为null）
+set default 父表有变更时，子表将外键列设置一个默认的值(Innodb不支持)
 
+
+
+
+## 数值函数
+ceil(x) 向上取整
+floor(x) 向下取整
+mod(x，y) 返回x/y的模
+rdnd()	返回0\~1内的随机数
+round(x,y) 求参数x的四舍五入的值，保留y位小数
 
 
 ## 隔离级别
 
+Read Uncommitted(读取未提交内容) -- 脏读
+Read Committed(读取提交内容) -- 大多数数据库系统的默认隔离级别
+Repeatable Read(可重读) -- MySql的默认隔离级别
+Serializable(可串行化) -- 
+
+
+事务
+
+开启commit rollback
+set autocommit = 0;
+
+开启一个事务
+start transaction
+commit
+
+
+
+显示隔离级别
+select @@transaction_isolation
+
+设置事务隔离级别
+set session transaction isolation level read uncommitted
+set session transaction isolation level read committed
+set session transaction isolation level repeatable read
+set session transaction isolation level read serializable
+
+
+
+savepoint 标识符为事务设置名称
+
+使用rollback to 标识语句将事务回滚到指定的保存点而不中止事务
+
+
+
+lock tables table_name [ read | write ]
+
+冻结对数据库的所有写入操作
+
+flush tables with read lock 
 
 
 
@@ -231,11 +286,38 @@ default-character-set=utf8
 
 
 
+索引结构
+B+Tree索引	最常见的索引类型，大部分引擎都支持B+树索引
+Hash索引		底层数据结构是用哈希表实现的，只有精确匹配索引列的查询才有效，不支持范围查询
+R-Tree(空间索引)		空间索引是MyISAM引擎的一个特殊索引类型，主要用于地理空间数据类型，通常使用较少
+Full-Text(全文索引)	是一种通过建立倒排索引，快速匹配文档的方式，类似于Lucene、Solr、ES
 
 
 
 
 
+| 索引      | InnoDB      | MyISAM | Memory |
+| --------- | ----------- | ------ | ------ |
+| B+Tree    | 支持        | 支持   | 支持   |
+| Hash      | 不支持      | 不支持 | 支持   |
+| R-Tree    | 不支持      | 支持   | 不支持 |
+| Full-Text | 5.6版本之上 | 支持   | 不支持 |
+
+
+
+查看字符集
+
+show character set
+
+查看相关字符集的校对规则
+
+SHOW COLLATION LIKE 'utf8%';
+
+
+
+ 命令查询当前服务器的字符集和校对规则
+
+show variables like 'character_set_server';
 
 
 

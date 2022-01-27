@@ -66,11 +66,11 @@ properties 类
 
 ​	<props>
 
-​		<prop key="">***</prop>
+​		<prop key="">\*\*\*</prop>
 
-​		<prop key="">***</prop>
+​		<prop key="">\*\*\*</prop>
 
-​		<prop key="">***</prop>
+​		<prop key="">\*\*\*</prop>
 
 ​	</props>
 
@@ -121,3 +121,21 @@ inject
 </dependency>
 
  
+事务控制
+Spring 事务管理接口
+TransactionDefinition
+
+PlatformTransactionManger   DataSourceTransactionManger   JDBC
+                            HibernateTransactionManger    Hibernate
+                            JpaTransactionManger          JPA
+                            JtaTransactionManger          JTA
+
+
+编程式
+声明式
+
+aop代理
+<aop:aspectj-autoproxy/>
+
+配置事务传播特性
+tx:advice
