@@ -321,6 +321,8 @@ show variables like 'character_set_server';
 
 
 
+二进制日志
+
 
 
 
