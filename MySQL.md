@@ -285,7 +285,6 @@ flush tables with read lock
 
 
 
-
 索引结构
 B+Tree索引	最常见的索引类型，大部分引擎都支持B+树索引
 Hash索引		底层数据结构是用哈希表实现的，只有精确匹配索引列的查询才有效，不支持范围查询
@@ -302,6 +301,125 @@ Full-Text(全文索引)	是一种通过建立倒排索引，快速匹配文档�
 | Hash      | 不支持      | 不支持 | 支持   |
 | R-Tree    | 不支持      | 支持   | 不支持 |
 | Full-Text | 5.6版本之上 | 支持   | 不支持 |
+
+
+
+索引分类
+
+
+
+| 分类     | 含义                                                 | 特点                     | 关键字   |
+| -------- | ---------------------------------------------------- | ------------------------ | -------- |
+| 主键索引 | 针对于表中主键创建的索引                             | 默认自动创建，只能有一个 | primary  |
+| 唯一索引 | 避免同一个表中某数据列中的值重复                     | 可以有多个               | unique   |
+| 常规索引 | 快速定位特定数据                                     | 可以有多个               |          |
+| 全文索引 | 全文索引查找的是文本中的关键词，而不是比较索引中的值 | 可以有多个               | fulltext |
+
+索引分类
+
+| 分类     | 含义                                                       |                      |
+| -------- | ---------------------------------------------------------- | -------------------- |
+| 聚集索引 | 将数据存储与索引放到一块，索引结构的叶子节点保存了行数据   | 必须有，而且只有一个 |
+| 二级索引 | 将数据与索引分开储存，索引结构的叶子节点关联的是对应的主键 | 可以存在多个         |
+
+如果存在主键，主键索引就是聚集索引
+
+如果不存在主键，将使用第一个唯一索引作为聚集索引
+
+如果没有主键，或没有适合的唯一索引，则InnoDB会自动生成一个rowid作为隐藏的聚集索引
+
+
+
+创建索引
+
+create [unique|fulltext] index index_name on table_name(index_col_name,...);
+
+查看索引
+
+show index from table_name;
+
+删除索引
+
+drop index index_name on table_name
+
+
+
+## sql性能分析：
+
+show session| global status like 'Com_______';
+
+七个下划线如 Com_insert | update | delete
+
+
+
+### 慢查询日志
+
+记录了所有执行时间超过指定参数（long_query_time，单位：秒，默认10秒）的所有sql语句的日志
+
+Mysql的妈妈查询日志默认没有开启，需要在MySQL的配置文件中配置信息：
+
+
+
+ 开启MySQL慢日志查询开关
+
+slow_query_log=1
+
+设置慢日志的时间为2秒，SQL语句执行时间超过2秒，就会视为慢查询，记录慢查询
+
+long_query_time=2
+
+
+
+show profiles 能够在做sql优化时帮助我们了解时间都耗费到哪里去了
+
+通过have_profiling参数，能够看到当前，MySQL是否支持profile操作
+
+select @@have_profiling;
+
+
+
+select @@profiling;
+
+set  [session|global] profiling = 1;
+
+ 
+
+查看每一条sql的耗时基本情况
+
+show profiles；
+
+查看指定query_id的sql语句各个阶段的耗时情况
+
+show profile for query_id;
+
+查看指定query_id的sql语句cpu的使用情况
+
+show profile cpu for query query_id;
+
+
+
+### explain执行计划
+
+ 在select语句前加上关键字explain|desc
+
+explain select * from 表名 where 条件;
+
+- id:表操作的执行顺序，id相同，执行顺序从上到下，id不同，值越大，越先执行
+- select_type:标识select类型，常见的取值有simple（简单表，即不适用表连接或者子查询）、primary（主查询，即外层的查询）、union（union中的第二个或者后面的查询语句）、subquery（select|where之后包含的子查询）等
+- type:表示连接类型，性能由好到差的连接类型为null、system、const（唯一索引时出现）、eq_ref、ref（非唯一性索引）、range、index、all。
+- possible_key：显示可能应用在这张表上的索引，一个或多个
+- key：实际使用的索引，如果为null，则没有使用索引。
+- key_len：表示索引中使用的字节数，该值为索引字段最大可能长度，并非实际使用长度，在不损失精确性的前提下，长度越短越好。
+- rows：MySQL认为必须要执行的行数，在innodb引擎的表中，是一个估计值，可能并不总是准确的
+- filtered：表示返回结果的行数占需要读取行数的百分比，filtered的值越大越好
+
+
+
+
+
+
+
+
 
 
 
