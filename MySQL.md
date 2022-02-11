@@ -1,24 +1,24 @@
-创建用户：create USER 用户名@IP地址 IDENTIFIED BY '密码' //指定IP地址
+创建用户：create user 用户名@IP地址 identified  by '密码' //指定IP地址
 
 修改密码：alter user '用户名'@'主机名' identified by '密码'	
 
-CREATE USER 用户名@'%' IDENTIFIED BY '密码'
+create user 用户名@'%' IDENTIFIED BY '密码'
 
 授予用户权限
 
-GRANT 权限1,权限2,权限3... ON 数据库.* TO 用户名@IP地址
+grant 权限1,权限2,权限3... on 数据库.* to 用户名@IP地址
 
 撤销用户权限：
 
-REVOKE 权限1,权限2,权限3... ON 数据库.* FROM 用户名@IP地址
+revoke  权限1,权限2,权限3... ON 数据库.* FROM 用户名@IP地址
 
 查看用户权限：
 
-SHOW GRANTS FOR 用户名@IP地址
+show grants for 用户名@IP地址
 
 删除用户：
 
-DROP USER 用户名@IP地址
+drop user 用户名@IP地址
 
 修改root密码
 
@@ -34,7 +34,7 @@ DB操作：show databases;
 
 查看表结构：discribe + 表名称
 
-显示集合：SELECT DISTINCT *column_name*,*column_name* FROM *table_name*;
+显示集合：select distinct *column_name*,*column_name* FROM *table_name*;
 
 distinct
 
@@ -59,11 +59,11 @@ MySQL的约束：
 | ---------- | ----------- | ------- | ------ | ----------- | -------- |
 | 关键字：   | PRIMARY KEY | DEFAULT | UNIQUE | FOREIGN KEY | NOT NULL |
 
-CREATE TABLE 表名（
+create table 表名（
 
 id int(10)    **PRIMARY KEY**, //主键
 
-name CHAR(20)
+name char (20)
 
 ）
 
@@ -412,6 +412,16 @@ explain select * from 表名 where 条件;
 - key_len：表示索引中使用的字节数，该值为索引字段最大可能长度，并非实际使用长度，在不损失精确性的前提下，长度越短越好。
 - rows：MySQL认为必须要执行的行数，在innodb引擎的表中，是一个估计值，可能并不总是准确的
 - filtered：表示返回结果的行数占需要读取行数的百分比，filtered的值越大越好
+
+
+
+
+
+
+
+## 索引使用
+
+最左前缀法则
 
 
 
