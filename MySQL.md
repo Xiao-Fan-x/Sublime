@@ -455,6 +455,52 @@ explain select * from 表名 where 条件;
 
 where order by group by 后面
 
+区分度较高的字段
+
+控制索引的数量，不是多多益善，维护索引的代价：影响增删改的效率
+
+如果索引列不能存储null值，建表时使用not null约束它
+
+
+
+## SQL 优化
+
+#### insert 优化
+
+批量插入 一次插入500-1000条
+
+手动提交事务
+
+主键顺序插入
+
+大批量插入数据：insert插入性能较低，使用load指令
+
+客户端连接服务端时，加上参数 --local-infile、
+
+mysql --local-infile -u root -p
+
+设置全局参数local_infile = 1，开启从本地加载文件导入数据的开关
+
+set global local_infile = 1；
+
+执行load指令将准备好的数据，加载到表结构中
+
+load data local infile '/root/sql1.log' into table 'tb_user' fields terminated by ',' lines terminated by '\n';
+
+#### 主键优化
+
+页分裂 ：主键乱序插入会造成页分裂
+
+页合并 ：当删除记录达到MERGE_THRESHOLD(默认为页的50%)，innodb会开始寻找最靠近的页进行合并
+
+#### order by优化
+
+
+
+
+
+
+
 
 
 
