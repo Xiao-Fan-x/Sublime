@@ -495,6 +495,10 @@ load data local infile '/root/sql1.log' into table 'tb_user' fields terminated b
 
 #### order by优化
 
+1.using filesort : 通过表的索引或全表扫描，读取数据，然后在排序缓冲区sort buffer中完成排序操作，非索引直接返回排序结果的都叫filesort
+
+2.using index：通过有序索引顺序扫描直接返回有序数据，不需要额外排序，效率高
+
 
 
 
