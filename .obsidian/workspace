@@ -1,0 +1,100 @@
+{
+  "main": {
+    "id": "4c4c7f61f2a695aa",
+    "type": "split",
+    "children": [
+      {
+        "id": "b95cdc24b7ebcce5",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "MySQL.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2d8e9c7505cdaadf",
+    "type": "split",
+    "children": [
+      {
+        "id": "6969cbe12b61c0e4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eeea1c54f871a1df",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "7a3312cd78035799",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 204,
+    "collapsed": true
+  },
+  "right": {
+    "id": "e8e39dc601144989",
+    "type": "split",
+    "children": [
+      {
+        "id": "55699303435e86eb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1e53ae831651e990",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "MySQL.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "b95cdc24b7ebcce5",
+  "lastOpenFiles": [
+    "MySQL.md",
+    "mybatis.md",
+    "study.md",
+    "spring5.md",
+    "Linux.md"
+  ]
+}

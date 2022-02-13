@@ -499,6 +499,14 @@ load data local infile '/root/sql1.log' into table 'tb_user' fields terminated b
 
 2.using index：通过有序索引顺序扫描直接返回有序数据，不需要额外排序，效率高
 
+#### group by优化
+using temporary
+using index
+
+#### limit优化
+查询排序代价很大 
+优化思路： 一般分页查询时，通过创建覆盖索引加子查询形式进行优化
+
 
 
 
