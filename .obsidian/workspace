@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "MySQL.md",
+            "file": "Java.md",
             "mode": "source",
             "source": false
           }
@@ -49,13 +49,11 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 204,
-    "collapsed": true
+    "width": 204
   },
   "right": {
     "id": "e8e39dc601144989",
@@ -71,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MySQL.md",
+                "file": "Java.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -91,6 +89,7 @@
   },
   "active": "b95cdc24b7ebcce5",
   "lastOpenFiles": [
+    "Java.md",
     "MySQL.md",
     "mybatis.md",
     "study.md",

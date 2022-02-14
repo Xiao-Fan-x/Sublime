@@ -253,7 +253,8 @@ set autocommit = 0;
 开启一个事务
 start transaction
 commit
-
+注意：begin/start transaction 命令并不是一个事务的起点，在执行到它们之后的第一个操作InnoDB表语句的时候，事务才真正启动。
+如果想马上启动一个事务，可以使用start transaction with consistent snapshot 命令。
 
 
 显示隔离级别
@@ -507,6 +508,14 @@ using index
 查询排序代价很大 
 优化思路： 一般分页查询时，通过创建覆盖索引加子查询形式进行优化
 
+#### count优化
+MyISAM引擎把一个表的总行数存在了磁盘上，因此在执行单纯的count(1)的时候会直接返回这个数，效率很高
+InnoDB是一行一行读然后累加
+优化思路 ：自己计数
+count(\*) ~ count(1) < count(主键) < count(字段)
+
+#### update优化
+InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁升级为表锁
 
 
 
