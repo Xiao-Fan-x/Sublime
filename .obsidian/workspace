@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "MySQL.md",
+            "file": "Java成神之路.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MySQL.md",
+                "file": "Java成神之路.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,6 +89,8 @@
   },
   "active": "b95cdc24b7ebcce5",
   "lastOpenFiles": [
+    "Java成神之路.md",
+    "Java数据结构与算法.md",
     "MySQL.md",
     "Java.md",
     "mybatis.md",
