@@ -519,18 +519,80 @@ InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且�
 
 
 
+## 视图
+create or  replace view name as select语句
+
+
+
+## 存储过程
+
+查询指定数据库的存储过程及状态信息
+select * from  information_schema.routines where routine_schema='xxx';
+
+储存过程定义
+create procedure name（in,out,inout  字段名 类型）
+call sp_name(@字段名);
+
+
+show create procedure name
+
+drop procedure if exists  name
+
+delimiter \$$#将语句的结束符号从分号;临时改为两个(可以是自定义)
+
+```
+mysql> delimiter $$ #将语句的结束符号从分号;临时改为两个$$(可以是自定义) mysql> CREATE PROCEDURE delete_matches(IN p_playerno INTEGER) -> BEGIN -> DELETE FROM MATCHES -> WHERE playerno = p_playerno; -> END$$ Query OK, 0 rows affected (0.01 sec)
+```
+
+
+
+
+#### 变量
+
+系统变量 @@
+
+show [session|global] variables; --查看所有系统变量
+show [session|global] variables like '...' 
+select @@[session|global] 系统变量名;  查看指定变量的值
+
+set  [session|global] 系统变量名 = 值
+set  @@[session|global] 系统变量名 = 值
+
+
+用户变量 @
+set @变量名 := ''
+
+select @变量名 := ’‘
+select 字段名 into @变量名 from table；
+
+局部变量
+declare 字段名  datatype  [DEFAULT value] 
+
+### 条件
+if 条件1 then
+。。。
+elseif 条件2 then
+。。。
+else
+。。。
+end if
+
+case 条件
+case  when then ,when  then,else end case;
+
+### 循环 
+while  条件  do  操作   end while
+repeat  sql  until 条件  end repeat;
+loop  需要在sql语句中添加跳出循环，否则死循环 leave ：break，iterate：continue
 
 
 
 
 
-
-
-
-
-
-
-
+## 游标
+声明： declare 游标名称 cursor for 查询语句；
+打开 open 游标名称
+获取游标记录：fetch 游标名称 into 变量；
 
 
 
