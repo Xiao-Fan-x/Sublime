@@ -591,8 +591,78 @@ loop  需要在sql语句中添加跳出循环，否则死循环 leave ：break�
 
 ## 游标
 声明： declare 游标名称 cursor for 查询语句；
+
 打开 open 游标名称
-获取游标记录：fetch 游标名称 into 变量；
+
+获取游标记录：fetch 游标名称 into 变量;
+
+关闭游标：close 游标名称；
+
+
+
+Handler_action
+
+​	 continue:继续执行当前程序
+
+​	exit：终止执行当前程序
+
+condition_value
+
+​	Allstate sqlstate_value:状态码，如02000
+
+
+
+储存函数
+
+create function 函数名
+
+begin
+
+end；
+
+
+
+## 触发器
+
+只支持行级触发器，不支持语句触发器
+
+创建
+
+create trigger trigger_name
+
+Before | after insert | update | delete
+
+On table_name  for each  row 行级触发器
+
+begin 	trigger_stmt
+
+end;
+
+Show. triggers
+
+Drop trigger [schema_name] trigger_name  如果没有指定schema_name,默认为当前数据库
+
+
+
+备份
+
+mysqldump
+
+全局锁：flush tables with read lock
+
+mysqldump -u  -p  数据库 >  name.sql
+
+unlock tables;
+
+
+
+
+
+
+
+
+
+
 
 
 
