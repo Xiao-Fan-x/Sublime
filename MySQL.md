@@ -654,13 +654,19 @@ mysqldump -u  -p  数据库 >  name.sql
 
 unlock tables;
 
+不加锁的一致性数据备份：
+
+mysqldump --single-transaction -u. -p. database_name > name.sql
 
 
 
+### 表级锁
 
+1.表锁
 
+2.元数据锁（meta data lock ，MDL）
 
-
+3.意向锁
 
 
 
