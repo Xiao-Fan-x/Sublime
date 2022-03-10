@@ -668,6 +668,21 @@ mysqldump --single-transaction -u. -p. database_name > name.sql
 
 3.意向锁
 
+读写锁：
+lock tables + name write|read；
+unlock tables
+元数据锁：
+加锁过程是系统自动控制的，不需显式使用，MDL锁主要作用是维护表元数据的数据一致性，在表上有活动事务的时候，不可以对元数据进行写入操作。为了避免DML和DDL冲突，保证读写的正确性
+当对一张表进行增删改查的时候，加上MDL读锁（共享）；当对表结构进行变更操作的时候，加MDL写锁（排他）。
+
+查看元数据锁：
+select object_type,object_schema,object_name,lock_type,lock_duration from performance_schema,metadata_locks;
+
+查看意向锁：
+select object_schema,object_name,index_name,lock_type,lock_mode,lock_data from performance_schema.data_lock
+
+
+
 
 
 

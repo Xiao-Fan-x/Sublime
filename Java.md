@@ -770,21 +770,15 @@ Callable接口提供有call()方法，可以有返回值；
 * workQueue：当线程数目超过核心线程数时用于保存任务的队列
 
     - 无界队列：
-
       LinkedBlockingQueue无界队列（大量新任务堆积最终导致OOM）
 
     - 有界队列：
-
       ArrayBlockingQueue（FIFO原则）、LinkedBlockingQueue（有界）
-
       PriorityBlockingQueue（优先级队列）
-
       使用有界队列时队列大小需和线程池大小互相配合，线程池较小有界队列较大时可减少内存消耗，降低cpu使用率和上下文切换，但是可能会限制系统吞吐量。
 
     - 同步移交队列：
-
       SynchronousQueue（等待队列）
-
       要将一个元素放入SynchronousQueue中，必须有另一个线程正在等待接收这个元素。只有在使用无界线程池或者有饱和策略时才建议使用该队列。
 
 * threadFactory：执行程序创建新线程时使用的工厂
