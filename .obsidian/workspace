@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "MySQL.md",
+            "file": "git.md",
             "mode": "source",
             "source": false
           }
@@ -53,7 +53,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 204
+    "width": 205
   },
   "right": {
     "id": "e8e39dc601144989",
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MySQL.md",
+                "file": "git.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,6 +89,8 @@
   },
   "active": "b95cdc24b7ebcce5",
   "lastOpenFiles": [
+    "git.md",
+    "ClickHouse.md",
     "MySQL.md",
     "mybatis.md",
     "maven.md",
@@ -96,8 +98,6 @@
     "Java数据结构与算法.md",
     "Gradle.md",
     "Java成神之路.md",
-    "spring5.md",
-    "计算机网络.md",
-    "study.md"
+    "spring5.md"
   ]
 }

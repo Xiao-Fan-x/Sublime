@@ -154,5 +154,5 @@ $ git commit --amend
 取消暂存的文件
 git reset HEAD <file>
 
-撤销未暂存区域
+撤销对文件的修改
 git checkout -- <file>...
