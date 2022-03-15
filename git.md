@@ -154,8 +154,16 @@ $ git commit --amend
 取消暂存的文件  撤销git add
 git reset HEAD <file>
 
+
 撤销对文件的修改
 git checkout -- <file>...
+表示将在工作空间但是不在暂存区的文件撤销更改
+git restore <file>
+
+
+作用是将暂存区的文件从暂存区撤出，但不会更改文件
+git restore --staged <file>
+
 
 切换到本地的分支
 git checkout testing
