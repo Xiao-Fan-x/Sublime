@@ -156,3 +156,26 @@ git reset HEAD <file>
 
 撤销对文件的修改
 git checkout -- <file>...
+
+切换到本地的分支
+git checkout testing
+
+
+
+git checkout -b iss53
+
+$ git branch iss53
+$ git checkout iss53
+
+
+
+git merge 新的分支 ： 将指针从当前移到完全新增内容的新分支
+
+删除分支
+ git branch -d + 分支
+
+
+### 遇到冲突时的分支合并
+任何因包含合并冲突而有待解决的文件，都会以未合并状态标识出来
+
+
