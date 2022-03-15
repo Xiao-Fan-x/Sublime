@@ -151,7 +151,7 @@ $ git commit -m 'initial commit'
 $ git add forgotten_file
 $ git commit --amend
 
-取消暂存的文件
+取消暂存的文件  撤销git add
 git reset HEAD <file>
 
 撤销对文件的修改
@@ -179,3 +179,10 @@ git merge 新的分支 ： 将指针从当前移到完全新增内容的新分�
 任何因包含合并冲突而有待解决的文件，都会以未合并状态标识出来
 
 
+查看暂存区文件
+git ls-files
+
+查看哪些分支已经合并到当前分支
+git branch --merged
+查看所有包含未合并工作的分支
+git branch --no-merged
