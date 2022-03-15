@@ -186,3 +186,13 @@ git ls-files
 git branch --merged
 查看所有包含未合并工作的分支
 git branch --no-merged
+
+切换远程的origin/serverfix分支映射成本地的sf分支
+git checkout -b sf origin/serverfix
+
+变基
+$ git checkout A
+$ git rebase master
+切换到A 分支，将A的操作，再master 上再做一遍
+$ git checkout master
+$ git merge A
