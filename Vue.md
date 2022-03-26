@@ -10,3 +10,18 @@
 下：down
 左：left
 右：right
+
+
+watch 
+handler：数值改变时执行
+deep： true时监听属性，false
+immediate: 初始化执行 
+
+-   `.stop` - 阻止冒泡
+-   `.prevent` - 阻止默认事件
+-   `.capture` - 阻止捕获
+-   `.self` - 只监听触发该元素的事件
+-   `.once` - 只触发一次
+-   `.left` - 左键事件
+-   `.right` - 右键事件
+-   `.middle` - 中间滚轮事件

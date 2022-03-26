@@ -486,7 +486,7 @@ set global local_infile = 1；
 
 执行load指令将准备好的数据，加载到表结构中
 
-load data local infile '/root/sql1.log' into table 'tb_user' fields terminated by ',' lines terminated by '\n';
+load data local infile '/root/sql1.log' into table 'tb_user' fields terminated by ',' lines terminated by '\n'; 
 
 #### 主键优化
 
@@ -813,8 +813,53 @@ show variables like 'character_set_server';
 
 
 
+## 数据库压测 sysbench
 
+基于sysbench构造测试表和测试数据
+sysbench --db-driver=mysq| --time= 300 --threads= 10 --report-interval=1 --mysql-host= 127.0.0.1 --mysq|-
+port=. 3306 --mysql-user=test_ user --mysql-password=test_ user --mysql-db=test_ db --tables=20 --
+table_ size= 000000 oltp read_ write --db-ps-mode= disable prepare
 
+测试数据库的综合读写TPS，使用的是oltp_ read_ write模式(大家看命令中最后不是prepare,是run了 ，就是运行压测) :
+sysbench --db-driver=mysq| --time= 300 --threads=10 --report-interval=1 --mysql-host=127.0.0.1 --mysql-
+port= 3306 --mysql-user=test_ user --mysql-password=test_ user - mysql-db=test _db --tables=20 --
+table_ size=1000000 oltp_ read_ _write --db-ps-mode=disable run
+
+测试数据库的只读性能，使用的是oltp_ read only模式(大家看命令中的oltp_ read_ write已经变为oltp_ read_ only了) :
+sysbench --db-driver=mysql --time=300 --threads=10 --report-interval=1 --mysql-host=127.0.0.1 --mysq|-
+port=3306 --mysql-user=test_ user --mysql-password=test_ user --mysq|-db=test_ db --tables=20 --
+table_ size=1000000 oltp_ read_ only --db-ps-mode=disable run
+
+测试数据库的删除性能，使用的是oltp_ delete模式:
+sysbench --db-driver=mysql --time= 300 --threads= 10 --report interval=1 --mysql-host= 127.0.0.1 --mysql-
+port= 3306 --mysql-user=test_ _user --mysql-password=test_ user --mysq|-db=test_ db --tables=20 --
+table_ size=1000000 oltp_ delete --db-ps-mode=disable run
+
+测试数据库的更新索弓l字段的性能，使用的是oltp_ update. index模式:
+sysbench --db-driver=mysql --time= 300 --threads=10 --report-interval=1 --mysql-host=127.0.0.1 --mysql-
+port= 3306 --mysql-user=test_ user --mysql-password=test_ user - mysql-db=test _db --tables=20 --
+table_ size=1000000 oltp_ update_ index --db-ps-mode=disable run
+
+测试数据库的更新非索I字段的性能，使用的是oltp_ update_ non _index模式:
+sysbench -- db driver=mysq| --time=300 --threads= 10 --report-interval=1 --mysql-host=127.0.0.1 --mysq|-
+port=3306 --mysql-user=test user --mysql-password=test user --mysq|-db=test_ db --tables=20 --
+table_ size= 1000000 oltp_ update_ non_ index --db-ps-mode=disable run
+
+测试数据库的插入性能，使用的是oltp_ insert模式:
+sysbench -- db driver=mysq| --time=300 --threads= 10 --report-interval=1 --mysql-host=127.0.0.1 --mysq|-
+port= 3306 --mysql-user=test_ user --mysql-password=test_ user --mysql-db=test _db --tables=20 --
+table_ size= 1000000 oltp_ insert --db-ps-mode= disable run
+
+测试数据库的写入性能，使用的是oltp_ _write_ only模式:
+sysbench --db-driver=mysql --time=300 --threads=10 --report-interval=1 --mysql-host=127.0.0.1 --mysq|-
+port=3306 --mysql-user=test_ user --mysql-password=test user --mysql-db=test_ db --tables=20 --
+table_ size= 1000000 oltp_ write. only --db-ps -mode=disable run
+
+使用上面的命令，sysbenchI 具会根据你的指令构造出各种各样的SQL语句去更新或者查询你的20张测试表里的数据，同时
+监测出你的数据库的压测性能指标，最后完成压测之后，可以执行下面的cleanup命令,清理数据。
+sysbench --db-driver=mysql --time=300 --threads=10 --report-interval=1 --mysql-host=127.0.0.1 --mysq|-
+port=3306 --mysql-user=test_ user --mysql-password=test user --mysql-db=test_ db --tables=20 --
+table_ size= 1000000 oltp_ read_ write --db-ps-mode= disable cleanup
 
 
 
