@@ -28,8 +28,6 @@ immediate: 初始化执行
 
 
 
-
-
 ## es6
 
 组件暴露：
@@ -45,6 +43,4 @@ immediate: 初始化执行
 查看webpack配置：
 
 vue inspect > output.js
-
-
 
