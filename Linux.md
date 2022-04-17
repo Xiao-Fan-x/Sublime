@@ -96,3 +96,9 @@ SBIT即Sticky Bit,它出现在其他用户权限的执行位上，它只能用�
 - chmod g+s testfile #为testfile文件加上SGID权限
 - chmod o+s testfile #为testfile文件加上SBID权限
 
+
+
+查看网络地址：ifconfig
+
+
+

@@ -38,3 +38,7 @@ idea配置
 
 
 
+mvn dependency:list
+
+mvn dependency:tree
+
