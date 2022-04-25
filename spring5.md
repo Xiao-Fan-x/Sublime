@@ -120,7 +120,7 @@ inject
     <version>2.3.12.RELEASE</version>
 </dependency>
 
- 
+
 事务控制
 Spring 事务管理接口
 TransactionDefinition
@@ -139,3 +139,14 @@ aop代理
 
 配置事务传播特性
 tx:advice
+
+
+
+
+
+@RestControllerAdvice
+
+
+
+@ExceptionHandler
+

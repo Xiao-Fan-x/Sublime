@@ -707,9 +707,12 @@ show variables like 'character_set_server';
 
 
 
+查询最大连接数
 
+show variables like '%max_connections%';
 
-
+//此修改方式重启数据库之后会重置
+set global max_connections=300 
 
 
 
