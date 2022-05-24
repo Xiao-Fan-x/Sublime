@@ -150,3 +150,22 @@ tx:advice
 
 @ExceptionHandler
 
+## SpringMVC 
+
+```java
+ServletContainersInitConfig extends AbstactAnnotationConfigDispatcherServletInitializer{
+
+  //乱码处理
+  protected Filter[] getServletFilters(){
+    CharacterEncodingFilter = new CharacterEncodingFilter();
+    filter.setEncoding("UTF-8");
+    return new Filter[]{filter};
+  }
+}
+```
+
+
+
+```java
+```
+
