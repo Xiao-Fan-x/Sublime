@@ -198,9 +198,19 @@ IFNULL(a,b)如果为NULL a->b
 
 查看：
 
-方法一：show variables like '%character%'; 方法二：show variables like 'collation%';
+方法一：show variables like '%character%'; 
+
+方法二：show variables like 'collation%';
 
 default-character-set=utf8
+
+Linux 环境下修改字符集
+
+my.conf   
+
+character_set_server=utf8
+
+
 
 ### 备份
 
