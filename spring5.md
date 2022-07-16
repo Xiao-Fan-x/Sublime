@@ -167,5 +167,20 @@ ServletContainersInitConfig extends AbstactAnnotationConfigDispatcherServletInit
 
 
 ```java
+生命周期 :
+	实例化 -> 属性赋值 -> 初始化 -> 使用 -> 销毁
+        
+InstantiationAwareBeanPostProcessor extends BeanPostProcessor
+可以在实例化前后调用方法
+
+        
+aware 接口获取spring容器的资源
+BeanNameAware				获取Bean名称
+BeanClassLoaderAware		获取类加载器
+BeanFactoryAware			获取BeanFactory	
+EnvironmentAware			获取应用运行环境信息
+EmbeddedValueResolverAware	获取Spring EL解析器	
+ApplicationContextAware		获取ApplicationContext上下文对象
+        
 ```
 

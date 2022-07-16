@@ -4,6 +4,16 @@ docker build -f  + dockerfile文件路径 -t  + 镜像名:[ tag ] (版本号)
 
 
 
+docker 
+
+sudo groupadd docker
+
+sudo gpasswd -a $USER docker
+
+newgrp docker
+
+
+
 | shot  |                                                                                         |     chinese  |
 | ---------------------------- | -------------------------------------------------------------------------------------- | ----- |
 | --add-host                   | -- Add a custom host-to-IP mapping                                                     |  -- 添加自定义主机到 IP 映射                              |

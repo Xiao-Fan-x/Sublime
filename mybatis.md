@@ -32,3 +32,52 @@ statementType	使用何种语句类型，默认PREPARED。 有STATEMENT，PREPAR
 
 </configuration>
 ```
+
+
+
+延迟加载
+
+fetchType="lazy | eager"
+
+association  实体类  属性
+
+collection  ofType 集合中属性的类型
+
+
+
+一级缓存 -> sqlSession级别
+
+失效的四种情况：
+
+1.不同的SqlSession对应不同的一级缓存
+
+2.同一个SqlSession但是查询条件不同
+
+3.同一个SqlSession两次查询期间执行了任何一次增删改操作
+
+4.同一个SqlSession两次查询期间手动清空了缓存
+
+
+
+二级缓存 -> SqlSessionFactory级别
+
+开启： a> cacheEnabled="true"
+
+​			b> <cache />
+
+​			c> 二级缓存必须在SQL Session关闭或提交之后有效
+
+​			d> 查询的数据所转换的实体类类型必须实现序列化接口
+
+
+
+ehcache 第三方缓存
+
+
+
+
+
+
+
+
+
