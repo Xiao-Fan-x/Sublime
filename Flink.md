@@ -48,3 +48,18 @@ env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
 ```
 
+```
+Flink Stream 分区
+
+1.随机分区
+stream.shuffle()
+
+2.轮询分区
+stream.rebalance()
+
+3.rescale重缩放分区
+
+4.广播分区（将每条数据发送到所有分区）
+
+5.全局分区（将所有分区合并到第一个）
+```
