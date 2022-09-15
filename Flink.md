@@ -2,9 +2,7 @@
 
 Nexmark
 
-
-
-![image-20220628165312985](C:\Users\17430\Documents\github\Sublime\新建文件夹\image-20220628165312985.png)
+![image-20220628165312985](Flink.assets/image-20220628165312985.png)
 
 在大数据场景下经常需要数据同步或者数据集成，也就是将数据库中的
 数据同步到大数据的数仓或者其他存储中。上图中的左边是传统的经典数据集成的模式之
@@ -66,3 +64,146 @@ stream.global()
 5.全局分区（将所有分区合并到第一个）
 
 ```
+
+
+
+```shell
+Flink start|kill
+
+bin/start-cluster.sh
+bin/stop-cluster.sh
+
+Master-slave 主从
+节点添加：
+vim flink-conf.yaml
+# JobManager 节点地址. 
+jobmanager.rpc.address: hadoop102
+
+vim workers
+hadoop103
+hadoop104
+
+优化：
+- jobmanager.memory.process.size:对JobManager进程可使用到的全部内存进行配置，
+包括 JVM 元空间和其他开销，默认为 1600M，可以根据集群规模进行适当调整。
+- taskmanager.memory.process.size:对TaskManager进程可使用到的全部内存进行配置，
+包括 JVM 元空间和其他开销，默认为 1600M，可以根据集群规模进行适当调整。
+- taskmanager.numberOfTaskSlots:对每个TaskManager能够分配的Slot数量进行配置，
+默认为 1，可根据 TaskManager 所在的机器能够提供给 Flink 的 CPU 数量决定。所谓
+Slot 就是 TaskManager 中具体运行一个任务所分配的计算资源。
+- parallelism.default:Flink任务执行的默认并行度，优先级低于代码中进行的并行度配
+置和任务提交时使用参数指定的并行度数量。
+```
+
+
+
+```xml
+pom.xml 打包
+<build>
+	<plugins>
+		<plugin>
+    	<groupId>org.apache.maven.plugins</groupId>
+    	<artifactId>maven-assembly-plugin</artifactId>
+     	<version>3.0.0</version>
+     	<configuration>
+				<descriptorRefs>
+        	<descriptorRef>jar-with-dependencies</descriptorRef>
+   			</descriptorRefs>
+			</configuration>
+			<executions>
+   			<execution>
+       		<id>make-assembly</id>
+       		<phase>package</phase>
+       		<goals>
+          	<goal>single</goal>
+            </goals>
+         	</execution>
+    		</executions>
+  	</plugin>
+	</plugins>
+</build>
+```
+
+
+
+```shel
+Flink 集群
+bin/flink run -m (指定JobManager) -c (程序入口类)  xxx.jar
+```
+
+
+
+
+
+## 部署模式：
+
+1.会话模式
+
+2.单作业模式
+
+3.应用模式
+
+
+
+### 会话模式：
+
+先启动集群再提交作业
+
+会话模式比较适合于单个规模小、执行时间短的大量作业。
+
+缺点明显：因为资源是共享的，所以资源不够了，提交新的 作业就会失败。另外，同一个 TaskManager 上可能运行了很多作业，如果其中一个发生故障导 致 TaskManager 宕机，那么所有作业都会受到影响。
+
+
+
+## 单作业模式
+
+为每个提交的作业启动一个集群
+
+
+
+## 应用模式
+
+不要客户端，直接把应用提交到 JobManger 上运行
+
+需要为每一个提交的应用单独启动一个 JobManager，也就是创建一个集群
+
+
+
+应用模式与单作业模式，都是提交作业之后才创建集群；
+
+单作业模式是通过客户端来提交的，客户端解析出的每一个作业对应一个集群；
+
+而应用模式下，是直接由 JobManager执行应用程序的，并且即使应用包含了多个作业，也只创建一个集群。
+
+
+
+## 高可用
+
+JobManager（主-备）
+
+```she
+## flink-conf.yaml文件：
+high-availability: zookeeper
+high-availability.storageDir: hdfs://hadoop102:9820/flink/standalone/ha
+high-availability.zookeeper.quorum:
+hadoop102:2181,hadoop103:2181,hadoop104:2181
+high-availability.zookeeper.path.root: /flink-standalone
+high-availability.cluster-id: /cluster_atguigu
+
+masters:
+hadoop102:8081
+hadoop103:8081
+```
+
+TaskManager（多节点- 重启）
+
+
+
+
+
+## Yarn模式
+
+YARN 上部署的过程是：
+
+客户端把 Flink 应用提交给 Yarn 的 ResourceManager，Yarn 的 ResourceManager 会向 Yarn 的 NodeManager 申请容器。在这些容器上，Flink 会部署 JobManager 和 TaskManager 的实例，从而启动集群。Flink 会根据运行在 JobManger 上的作业 所需要的 Slot 数量动态分配 TaskManager 资源
+
