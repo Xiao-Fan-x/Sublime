@@ -19,7 +19,6 @@ create table tbl_log(id int4, create_date date, log_type text);
 create table tbl_log_sql(sql text) INHERITS(tbl_log);
 -- 通过INHERITS(tbl_log)关键字表示tbl_log_sql继承表tbl_log，子表可以定义额外的字段
 
-
 查看表结构
 \d tbl_log_sql
 
@@ -36,7 +35,6 @@ select * from tbl_log_sql;
 select * from only tbl_log;
 
 注意：对于使用了继承表的场景，对父表的update, delete的操作需谨慎，它会对父表和子表的数据进行DML操作
-
 
 创建分区表
 步骤
@@ -86,7 +84,6 @@ CREATE INDEX idx_log_his_202109_ctime ON log_ins_202109 USING btree (create_time
 CREATE INDEX idx_log_his_202110_ctime ON log_ins_202110 USING btree (create_time);
 CREATE INDEX idx_log_his_202111_ctime ON log_ins_202111 USING btree (create_time);
 CREATE INDEX idx_log_his_202112_ctime ON log_ins_202112 USING btree (create_time);
-
 
 -- 创建触发器函数，设置数据插入父表时的路由规则
 create or replace function log_hit_insert_trigger()
@@ -265,7 +262,6 @@ CREATE TABLE log_par_202101 PARTITION OF log_par FOR VALUES FROM ('2021-01-01') 
 创建索引
 CREATE INDEX idx_log_par_202101_ctime ON log_par_202101 USING btree(create_time);
 
-
 删除分区
 \1. 直接删分区方式
 DROP TABLE log_par_202101;
@@ -275,3 +271,108 @@ ALTER TABLE log_par DETACH PARTITION log_par_202101;
 
 -- 恢复分区
 ALTER TABLE log_par ATTACH PARTITION log_par_202101 FOR VALUES FROM ('2021-01-01') TO ('2021-02-01');
+
+
+
+
+
+"" --> ''
+`` --> 
+varchar/datetime --> timestamp
+
+substring_index() --> split_part()
+
+别名不能加 ""或者''，错误示例，select id as "id" from test
+函数引用必须用"xxxx()"
+
+
+增加隐式转换
+create cast (INTEGER as varchar) with inout as implicit;
+create cast (varchar as INTEGER) with inout as implicit;
+
+
+## group_concat
+SELECT id,array_to_string(array_agg(city),',') as gpcity from cities group by id;
+或
+CREATE AGGREGATE group_concat(anyelement)
+(
+sfunc = array_append, -- 每行的操作函数，将本行append到数组里
+stype = anyarray, -- 聚集后返回数组类型
+initcond = '{}' -- 初始化空数组
+);
+
+IFNULL --> NULLIF
+NOW( ) - INTERVAL 7 DAY  --> NOW( ) - INTERVAL '7 DAY' 
+
+
+
+## 删除自增序列
+DROP SEQUENCE public.seq_ty_user_tenant_id
+## 创建自增序列
+CREATE SEQUENCE public.seq_ty_workbench_operlog_id
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1     --如果表中有数据，开始值应该是数据表最后一行加1
+CACHE 1;
+## 为表增加序列
+ALTER TABLE ty_user_tenant ALTER COLUMN id SET DEFAULT nextval('seq_ty_user_tenant_id'::regclass)
+
+
+
+ALTER TABLE ty_workbench_operlog ALTER COLUMN id SET DEFAULT nextval('seq_ty_workbench_operlog_id'::regclass)
+
+
+## insert 报错
+insert into xxx (x,x) value --> values
+
+## group by问题
+ERROR:  column "a.tenant_id" must appear in the GROUP BY clause or be used in an aggregate function
+查询时a.tenant_id加MAX()函数
+
+select MAX(id), name from test group by name;
+
+## 替换别名字符串
+AS\s+"\S+"
+
+## 替换"为'
+("\S",)
+
+
+
+## 添加驱动pom
+<dependency>
+	<groupId>com.highgo</groupId>
+	<artifactId>HgdbJdbc</artifactId>
+	<version>6.2.2</version>
+</dependency>
+
+## url连接
+jdbc:highgo://192.168.2.254:5866/aiops?stringtype=unspecified&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;allowMultiQueries=true&amp;characterEncoding=utf8
+
+## driver
+com.highgo.jdbc.Driver
+
+## 字符串转日期
+TO_DATE('2020-12-01', 'yyyy-MM-dd');
+
+## 字符串位置
+instr --> strpos
+
+
+
+
+
+
+
+```
+ to_char(to_timestamp(#{startTime}, 'yyyy-MM-dd hh24:mi:ss'),'yyyy-MM-dd hh24:mi:ss')
+ 
+ to_char(update_time,'yyyy-MM-dd HH24:mi:ss:ms') update_time,
+ 
+ 
+ COALESCE(update_staff,'') update_staff,
+ 
+ 
+ 
+```
